@@ -27,11 +27,11 @@ export default function Metro() {
   );
 
   const ticks = [];
-  for (let mm = 0; mm <= CM * 10; mm += 5) {
+  for (let mm = 0; mm <= CM * 10; mm += 10) {
     const y = (mm / 10) * PX;
     const cm = mm % 10 === 0;
     const five = mm % 50 === 0;
-    ticks.push(<line key={mm} x1="0" x2={five ? 11 : cm ? 8 : 4} y1={y} y2={y} />);
+    if (five) ticks.push(<line key={mm} x1="0" x2="11" y1={y} y2={y} />);
     if (cm && mm > 0)
       ticks.push(
         <text key={`t${mm}`} x="16" y={y + 3} textAnchor="middle" className={five ? "fill-filo" : undefined}>
@@ -53,6 +53,12 @@ export default function Metro() {
         className="absolute left-0 top-0 stroke-grafite font-mono text-[9px] [&_text]:fill-grafite [&_text]:stroke-none"
         strokeWidth="1"
       >
+        <defs>
+          <pattern id="metro-mm" width="30" height={PX} patternUnits="userSpaceOnUse">
+            <path d={`M0 0.5H8M0 ${PX / 2 + 0.5}H4`} stroke="var(--grafite)" />
+          </pattern>
+        </defs>
+        <rect width="12" height={CM * PX + 2} fill="url(#metro-mm)" stroke="none" />
         {ticks}
       </svg>
       <span className="absolute inset-x-0 top-1/2 h-[2px] -translate-y-1/2 bg-filo" />

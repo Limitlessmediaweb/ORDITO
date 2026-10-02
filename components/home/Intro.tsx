@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import Logo from "@/components/Logo";
 import { gsap, Flip, useGSAP, prefersReduced } from "@/lib/gsap";
 import { useLenis } from "@/components/SmoothScroll";
+import { holdInit, releaseInit, releaseAfterQuiet } from "@/lib/deferInit";
 
 const KEY = "ordito:intro";
 const WARP = 15; // fili d'ordito
@@ -35,7 +36,13 @@ export default function Intro() {
         seen = sessionStorage.getItem(KEY) === "1";
       } catch {}
 
+      let held = false;
       const done = () => {
+        if (held) {
+          held = false;
+          // le sezioni sotto la piega si preparano mentre si guarda l'hero
+          releaseAfterQuiet();
+        }
         try {
           sessionStorage.setItem(KEY, "1");
         } catch {}
@@ -52,6 +59,15 @@ export default function Intro() {
       }
 
       lenis?.stop();
+      holdInit();
+      held = true;
+      // se il contesto viene rifatto (es. arriva Lenis) prima della fine, la coda non deve restare bloccata
+      const release = () => {
+        if (held) {
+          held = false;
+          releaseInit();
+        }
+      };
       gsap.set(headerLogo, { autoAlpha: 0 });
       const q = gsap.utils.selector(el);
       const logo = q("[data-intro-logo]")[0] as unknown as SVGSVGElement;
@@ -61,7 +77,7 @@ export default function Intro() {
           .timeline({ onComplete: done })
           .from(logo, { autoAlpha: 0, duration: 0.6 })
           .to(el, { autoAlpha: 0, duration: 0.6 }, "+=0.5");
-        return;
+        return release;
       }
 
       const tl = gsap.timeline({ onComplete: done, defaults: { ease: "sarta" } }).timeScale(1.2);
@@ -108,6 +124,7 @@ export default function Intro() {
         .to(q("[data-skip]"), { autoAlpha: 0, duration: 0.3 }, "vola")
         .set(headerLogo, { autoAlpha: 1 })
         .set(logo, { autoAlpha: 0 });
+      return release;
     },
     { scope: root, dependencies: [lenis] },
   );
@@ -124,10 +141,11 @@ export default function Intro() {
       <noscript>
         <style>{`#intro{display:none}`}</style>
       </noscript>
-      <div data-left className="absolute inset-y-0 left-0 w-1/2 bg-cemento">
+      {/* pannelli al 99,5%: non del tutto opachi, così il browser dipinge subito l'hero sotto (LCP) */}
+      <div data-left className="absolute inset-y-0 left-0 w-1/2 bg-cemento/[0.995]">
         <span data-seam className="absolute inset-y-0 right-0 w-px origin-top scale-y-0 bg-filo" />
       </div>
-      <div data-right className="absolute inset-y-0 right-0 w-1/2 bg-cemento">
+      <div data-right className="absolute inset-y-0 right-0 w-1/2 bg-cemento/[0.995]">
         <span data-seam className="absolute inset-y-0 left-0 w-px origin-bottom scale-y-0 bg-filo" />
       </div>
 

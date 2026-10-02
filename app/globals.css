@@ -4,6 +4,8 @@
   --color-cemento: #d9d6d0;
   --color-grafite: #141414;
   --color-filo: #e8432e;
+  /* rosso per il testo su fondo chiaro: stesso tono, contrasto AA (4.7:1 su cemento) */
+  --color-filo-ink: #a63019;
   --color-carta: #f4f1ea;
   --color-gesso: #9a968e;
   /* gesso scuro: stesso tono, contrasto AA su cemento per testi piccoli */

@@ -46,7 +46,7 @@ export default async function CapoPage({ params }: PageProps<"/capo/[slug]">) {
           <CapoCard capo={capo} eager />
         </div>
         <div className="flex flex-col">
-          <p className="tag text-filo">
+          <p className="tag text-filo-ink">
             {capo.codice} · {String(i + 1).padStart(2, "0")}/06
           </p>
           <SplitTitle className="mt-3 font-display text-[18vw] uppercase leading-[0.86] md:text-[8.5vw]">{capo.nome}</SplitTitle>
@@ -87,7 +87,7 @@ export default async function CapoPage({ params }: PageProps<"/capo/[slug]">) {
         <p className="tag text-gesso-ink">Prossimo capo</p>
         <TendaLink href={`/capo/${next.slug}`} className="group mt-2 inline-flex items-baseline gap-4 font-display text-[14vw] uppercase leading-none md:text-[7vw]">
           {next.nome}
-          <span className="text-filo transition-transform duration-500 group-hover:translate-x-3">→</span>
+          <span className="text-filo-ink transition-transform duration-500 group-hover:translate-x-3">→</span>
         </TendaLink>
       </section>
       <Footer />

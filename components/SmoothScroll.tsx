@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
 import { gsap, ScrollTrigger, prefersReduced } from "@/lib/gsap";
@@ -29,18 +29,30 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // A ogni cambio pagina: in cima e ricalcolo dei trigger dopo font e immagini.
+  // A ogni cambio pagina: in cima e ricalcolo dei trigger. Al primo caricamento ci pensa
+  // ScrollTrigger da solo (evento load): niente refresh doppi, che su mobile costano centinaia di ms.
+  const prevPath = useRef(pathname);
   useEffect(() => {
+    const hash = location.hash;
+    const goToHash = () => {
+      const el = hash ? document.querySelector(hash) : null;
+      if (!el) return;
+      if (lenis) lenis.scrollTo(el as HTMLElement, { immediate: true, force: true });
+      else el.scrollIntoView();
+    };
+    if (prevPath.current === pathname) {
+      // primo caricamento (o arrivo di Lenis): solo l'eventuale ancora, dopo il load
+      if (hash && document.readyState !== "complete") window.addEventListener("load", () => requestAnimationFrame(goToHash), { once: true });
+      return;
+    }
+    prevPath.current = pathname;
     lenis?.scrollTo(0, { immediate: true, force: true });
     window.scrollTo(0, 0);
-    const refresh = () => ScrollTrigger.refresh();
-    const id = window.setTimeout(refresh, 120);
-    document.fonts?.ready.then(refresh);
-    window.addEventListener("load", refresh, { once: true });
-    return () => {
-      window.clearTimeout(id);
-      window.removeEventListener("load", refresh);
-    };
+    const id = requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+      goToHash();
+    });
+    return () => cancelAnimationFrame(id);
   }, [pathname, lenis]);
 
   return <LenisCtx.Provider value={lenis}>{children}</LenisCtx.Provider>;

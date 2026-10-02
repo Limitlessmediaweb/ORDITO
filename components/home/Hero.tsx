@@ -18,16 +18,17 @@ export default function Hero() {
         const { motion, fine } = ctx.conditions as { motion: boolean; fine: boolean };
         if (!motion) return;
 
-        const split = SplitText.create(q("[data-title] > span"), { type: "lines,chars", mask: "lines", linesClass: "split-line" });
+        const split = SplitText.create(q("[data-title] > span"), { type: "lines,chars", mask: "lines", linesClass: "split-line", aria: "none" });
         gsap.set(split.chars, { yPercent: 110 });
-        gsap.set(q("[data-jacket]"), { autoAlpha: 0, y: 40, scale: 0.96 });
+        // la giacca resta sempre dipinta (è l'elemento LCP): entra solo con transform
+        gsap.set(q("[data-jacket]"), { y: 40, scale: 0.96 });
         gsap.set(q("[data-meta]"), { autoAlpha: 0 });
         gsap.set(q("[data-stitch]"), { drawSVG: "0% 0%" });
 
         const enter = () => {
           const tl = gsap.timeline({ defaults: { ease: "ago" } });
           tl.to(split.chars, { yPercent: 0, duration: 1.1, stagger: { each: 0.025, from: "start" } })
-            .to(q("[data-jacket]"), { autoAlpha: 1, y: 0, scale: 1, duration: 1.4 }, 0.15)
+            .to(q("[data-jacket]"), { y: 0, scale: 1, duration: 1.4 }, 0.15)
             .to(q("[data-meta]"), { autoAlpha: 1, duration: 0.6, stagger: 0.08 }, 0.6)
             .to(q("[data-stitch]"), { drawSVG: "0% 100%", duration: 1.2, ease: "power1.inOut" }, 0.9);
           // la giacca respira
@@ -78,6 +79,7 @@ export default function Hero() {
     <section ref={root} aria-labelledby="hero-title" className="crocini relative grid h-svh min-h-[560px] place-items-center overflow-hidden">
       <h1
         id="hero-title"
+        aria-label="Ogni capo inizia da un filo"
         data-title
         className="pointer-events-none absolute inset-x-0 top-[17%] z-0 select-none text-center font-display uppercase leading-[0.86] tracking-[-0.01em] text-grafite md:top-[12%]"
       >

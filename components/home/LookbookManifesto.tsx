@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { gsap, Flip, useGSAP, MQ } from "@/lib/gsap";
+import { deferInit } from "@/lib/deferInit";
 import { setTone } from "@/lib/tone";
 import { useViewportKey } from "@/lib/useViewportKey";
 
@@ -30,7 +31,10 @@ export default function LookbookManifesto() {
   const vk = useViewportKey();
 
   useGSAP(
-    () => {
+    // creata nei momenti liberi dopo l'intro (vedi lib/deferInit)
+    (_, contextSafe) =>
+      deferInit(
+        contextSafe!(() => {
       const q = gsap.utils.selector(root);
       const mm = gsap.matchMedia();
       mm.add({ desktop: MQ.desktop, mobile: MQ.mobile }, (ctx) => {
@@ -112,7 +116,8 @@ export default function LookbookManifesto() {
       mm.add(MQ.reduced, () => {
         gsap.set(q("[data-look]"), { clipPath: "none" });
       });
-    },
+        }),
+      ),
     { scope: root, dependencies: [vk], revertOnUpdate: true },
   );
 
@@ -122,18 +127,19 @@ export default function LookbookManifesto() {
         {/* ---- Cap. 7 Manifesto (sotto) ---- */}
         <section aria-labelledby="manifesto-title" className="absolute inset-0 flex flex-col justify-center bg-cemento px-5 md:px-10 motion-reduce:relative motion-reduce:py-24">
           <header data-manifesto-head className="absolute left-5 top-20 md:left-10 md:top-28">
-            <p className="tag text-filo">Cap. 07</p>
+            <p className="tag text-filo-ink">Cap. 07</p>
             <h2 id="manifesto-title" className="mt-2 font-display text-4xl uppercase leading-none md:text-6xl">
               Manifesto
             </h2>
           </header>
-          <p className="max-w-[62vw] font-display text-[13vw] uppercase leading-[0.92] md:max-w-[60vw] md:text-[6.6vw]" aria-label="Non vendiamo capi finiti. Mostriamo come si finiscono.">
+          <p className="max-w-[62vw] font-display text-[13vw] uppercase leading-[0.92] md:max-w-[60vw] md:text-[6.6vw]">
+            <span className="sr-only">Non vendiamo capi finiti. Mostriamo come si finiscono.</span>
             {RIGHE.map((r, i) => (
               <span key={i} data-riga aria-hidden="true" className="relative block pb-[0.12em]">
                 <span className="flex flex-wrap gap-x-[0.22em]">
                   {r.map((w) => (
                     <span key={w} className="inline-block overflow-hidden pb-[0.04em]">
-                      <span data-word className={`inline-block ${w.startsWith("fini") ? "text-filo" : ""}`}>
+                      <span data-word className={`inline-block ${w.startsWith("fini") ? "text-filo-ink" : ""}`}>
                         {w}
                       </span>
                     </span>

@@ -4,7 +4,9 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger, useGSAP, MQ, prefersReduced } from "@/lib/gsap";
+import { deferInit } from "@/lib/deferInit";
 import { glBus, webglOk } from "@/lib/glbus";
+import { useNear } from "@/lib/useNear";
 import type { FabricState } from "@/components/gl/FabricGL";
 
 const FabricGL = dynamic(() => import("@/components/gl/FabricGL"), { ssr: false });
@@ -24,6 +26,7 @@ export default function Materia() {
   const state = useRef<FabricState>({ progress: 0, mx: 0.5, my: 0.5, strength: 0, vel: 0 });
   const [gl, setGl] = useState(false);
   const [ready, setReady] = useState(false);
+  const near = useNear(root, "120% 0px");
 
   // carica three.js solo quando la sezione si avvicina
   useEffect(() => {
@@ -42,7 +45,10 @@ export default function Materia() {
   }, []);
 
   useGSAP(
-    () => {
+    // creata nei momenti liberi dopo l'intro (vedi lib/deferInit)
+    (_, contextSafe) =>
+      deferInit(
+        contextSafe!(() => {
       const q = gsap.utils.selector(root);
       const mm = gsap.matchMedia();
       mm.add({ desktop: MQ.desktop, mobile: MQ.mobile, fine: MQ.fine }, (ctx) => {
@@ -116,7 +122,8 @@ export default function Materia() {
           if (onLeave) stage?.removeEventListener("pointerleave", onLeave);
         };
       });
-    },
+        }),
+      ),
     { scope: root },
   );
 
@@ -133,7 +140,7 @@ export default function Materia() {
         {/* macro HTML: fallback e reduced-motion */}
         {TESSUTI.map((t, i) => (
           <div key={t.nome} data-fab-img className={`absolute inset-0 transition-[visibility] ${ready ? "invisible" : ""}`} style={{ opacity: i === 0 ? 1 : 0 }}>
-            <Image src={t.img} alt={t.alt} fill sizes="100vw" className="object-cover" />
+            {near && <Image src={t.img} alt={t.alt} fill sizes="100vw" className="object-cover" />}
           </div>
         ))}
         {gl && <FabricGL urls={URLS} state={state} onReady={onReady} className="absolute inset-0" />}

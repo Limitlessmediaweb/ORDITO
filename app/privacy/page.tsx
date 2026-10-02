@@ -10,7 +10,7 @@ export default function PrivacyPage() {
   return (
     <main id="contenuto" className="pt-28 md:pt-36">
       <article className="mx-auto max-w-2xl px-4 pb-24 md:px-0">
-        <p className="tag inline-block border border-filo px-2 py-1 text-filo">Bozza · non definitiva</p>
+        <p className="tag inline-block border border-filo-ink px-2 py-1 text-filo-ink">Bozza · non definitiva</p>
         <h1 className="mt-6 font-display text-6xl uppercase leading-none md:text-8xl">Privacy</h1>
         <div className="mt-10 space-y-6 text-lg leading-relaxed">
           <p>

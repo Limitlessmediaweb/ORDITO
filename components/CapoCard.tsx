@@ -4,6 +4,7 @@ import Image from "next/image";
 import TendaLink from "./TendaLink";
 import { useRef, useState } from "react";
 import { gsap, Flip, useGSAP, MQ, prefersReduced } from "@/lib/gsap";
+import { useNear } from "@/lib/useNear";
 import { euro, type Capo } from "@/lib/capi";
 
 /**
@@ -15,6 +16,8 @@ export default function CapoCard({ capo, eager = false }: { capo: Capo; eager?: 
   const [cw, setCw] = useState(0);
   const [back, setBack] = useState(false);
   const busy = useRef(false);
+  const near = useNear(root, "60% 100%");
+  const show = eager || near;
 
   useGSAP(
     () => {
@@ -107,14 +110,14 @@ export default function CapoCard({ capo, eager = false }: { capo: Capo; eager?: 
               className="absolute inset-0"
               style={{ zIndex: i === 0 ? 2 : 1, visibility: i === 0 ? "visible" : "hidden" }}
             >
-              <Image
+              {(show && (i === 0 || near)) && <Image
                 src={c.img}
                 alt={`${capo.nome}, colore ${c.nome.toLowerCase()}, vista frontale`}
                 fill
                 sizes="(max-width: 768px) 78vw, 30vw"
                 loading={eager ? "eager" : "lazy"}
                 className="object-cover"
-              />
+              />}
             </div>
           ))}
 
@@ -124,7 +127,7 @@ export default function CapoCard({ capo, eager = false }: { capo: Capo; eager?: 
             data-open="0"
             className="absolute bottom-3 right-3 z-[4] aspect-[3/4] w-[24%] overflow-hidden border border-grafite/20 data-[open='1']:inset-0 data-[open='1']:w-full data-[open='1']:border-0"
           >
-            <Image src={capo.retro} alt={`${capo.nome}, vista dal retro`} fill sizes="30vw" className="object-cover" />
+            {show && <Image src={capo.retro} alt={`${capo.nome}, vista dal retro`} fill sizes="30vw" className="object-cover" />}
           </div>
 
           <p className="tag absolute left-3 top-3 z-[5]">{capo.codice}</p>

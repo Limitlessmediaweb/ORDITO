@@ -19,7 +19,7 @@ export default function ManifestoPage() {
   return (
     <main id="contenuto" className="pt-28 md:pt-36">
       <section className="px-4 md:px-10">
-        <p className="tag text-filo">Manifesto · ORDITO</p>
+        <p className="tag text-filo-ink">Manifesto · ORDITO</p>
         <SplitTitle className="mt-4 font-display text-[17vw] uppercase leading-[0.86] md:text-[11vw]">Mostriamo come si finiscono.</SplitTitle>
       </section>
 
@@ -37,7 +37,7 @@ export default function ManifestoPage() {
         <ol className="mt-8 grid gap-10 md:grid-cols-4 md:gap-8">
           {PRINCIPI.map(([n, t, d]) => (
             <li key={n} className="crocini relative border-t border-grafite pt-6">
-              <p className="font-mono text-sm text-filo">{n}</p>
+              <p className="font-mono text-sm text-filo-ink">{n}</p>
               <h3 className="mt-3 font-display text-3xl uppercase leading-none">{t}</h3>
               <p className="mt-3 max-w-xs text-base leading-snug">{d}</p>
             </li>

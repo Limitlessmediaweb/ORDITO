@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { gsap, useGSAP, MQ } from "@/lib/gsap";
+import { deferInit } from "@/lib/deferInit";
 import { CAPI } from "@/lib/capi";
 import CapoCard from "@/components/CapoCard";
 
@@ -10,7 +11,10 @@ export default function Collezione() {
   const root = useRef<HTMLElement>(null);
 
   useGSAP(
-    () => {
+    // creata nei momenti liberi dopo l'intro (vedi lib/deferInit)
+    (_, contextSafe) =>
+      deferInit(
+        contextSafe!(() => {
       const q = gsap.utils.selector(root);
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
@@ -43,7 +47,8 @@ export default function Collezione() {
       mm.add(MQ.reduced, () => {
         gsap.set(q("[data-track]"), { x: 0 });
       });
-    },
+        }),
+      ),
     { scope: root },
   );
 
@@ -51,7 +56,7 @@ export default function Collezione() {
     <section ref={root} id="collezione" aria-labelledby="collezione-title" className="relative">
       <div data-stage className="relative flex h-svh flex-col justify-center overflow-hidden motion-reduce:h-auto motion-reduce:py-24">
         <header className="px-4 pt-16 md:absolute md:left-10 md:top-24 md:px-0 md:pt-0">
-          <p className="tag text-filo">Cap. 05</p>
+          <p className="tag text-filo-ink">Cap. 05</p>
           <h2 id="collezione-title" className="mt-2 font-display text-4xl uppercase leading-none md:text-6xl">
             Collezione
           </h2>

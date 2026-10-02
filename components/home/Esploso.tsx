@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import { useRef } from "react";
-import { gsap, ScrollTrigger, useGSAP, MQ } from "@/lib/gsap";
+import { gsap, useGSAP, MQ } from "@/lib/gsap";
 import { createSequence } from "@/lib/sequence";
+import { deferInit } from "@/lib/deferInit";
 import { setTone } from "@/lib/tone";
 
 type Part = {
@@ -45,7 +46,10 @@ export default function Esploso({ corto = false }: { corto?: boolean }) {
   const canvas = useRef<HTMLCanvasElement>(null);
 
   useGSAP(
-    () => {
+    // creata dopo l'intro, nei momenti liberi (vedi lib/deferInit)
+    (_, contextSafe) =>
+      deferInit(
+        contextSafe!(() => {
       const q = gsap.utils.selector(root);
       const mm = gsap.matchMedia();
 
@@ -71,7 +75,12 @@ export default function Esploso({ corto = false }: { corto?: boolean }) {
         const paint = () => {
           const i = Math.round(state.frame * (seq.count - 1));
           const img = seq.nearest(i);
-          if (!img) return;
+          if (!img) {
+            // nessun frame ancora: stesso grigio del video, mai un rettangolo nero
+            c2d.fillStyle = "#ccc8c7";
+            c2d.fillRect(0, 0, cv.width, cv.height);
+            return;
+          }
           const key = seq.frames[i] ? i : -2 - i; // ridisegna quando arriva il frame esatto
           if (key === drawn) return;
           drawn = key;
@@ -88,9 +97,8 @@ export default function Esploso({ corto = false }: { corto?: boolean }) {
 
         // Il caricamento parte alla prima interazione o quando la sezione si avvicina.
         const kick = () => seq.start();
-        const evts = ["wheel", "touchstart", "keydown", "scroll"] as const;
+        const evts = ["wheel", "touchstart", "keydown", "scroll", "pointerdown"] as const;
         evts.forEach((e) => window.addEventListener(e, kick, { once: true, passive: true }));
-        ScrollTrigger.create({ trigger: root.current, start: "top 200%", once: true, onEnter: kick });
         if (corto) kick();
 
         size();
@@ -180,7 +188,8 @@ export default function Esploso({ corto = false }: { corto?: boolean }) {
       mm.add(MQ.reduced, () => {
         gsap.set(q("[data-label], [data-count]"), { autoAlpha: 1 });
       });
-    },
+        }),
+      ),
     { scope: root },
   );
 
@@ -196,7 +205,7 @@ export default function Esploso({ corto = false }: { corto?: boolean }) {
 
         <div data-ink className="relative z-10 flex h-full flex-col items-center justify-center text-grafite">
           <header data-intro-copy className="absolute left-4 top-20 max-w-[18rem] md:left-10 md:top-28">
-            <p className="tag text-filo">Cap. 02</p>
+            <p className="tag text-filo-ink">Cap. 02</p>
             <h2 id="anatomia-title" className="mt-2 font-display text-4xl uppercase leading-none md:text-6xl">
               Anatomia di una giacca
             </h2>

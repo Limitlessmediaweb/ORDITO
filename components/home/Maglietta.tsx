@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { gsap, useGSAP, MQ } from "@/lib/gsap";
+import { deferInit } from "@/lib/deferInit";
 
 // Geometria della t-shirt assemblata (viewBox 1000×1000)
 const FRONT = "M430 290 Q500 345 570 290 L660 312 Q652 372 665 430 L665 760 L335 760 L335 430 Q348 372 340 312 Z";
@@ -46,7 +47,10 @@ export default function Maglietta() {
   const root = useRef<HTMLElement>(null);
 
   useGSAP(
-    () => {
+    // creata nei momenti liberi dopo l'intro (vedi lib/deferInit)
+    (_, contextSafe) =>
+      deferInit(
+        contextSafe!(() => {
       const q = gsap.utils.selector(root);
       const mm = gsap.matchMedia();
 
@@ -71,7 +75,7 @@ export default function Maglietta() {
         gsap.set(q("[data-print-layer]"), { x: 7 });
         gsap.set(q("[data-squeegee]"), { autoAlpha: 0, y: 0 });
         gsap.set(q("[data-final]"), { autoAlpha: 0, y: 16 });
-        gsap.set(q("[data-step]"), { opacity: 0.25 });
+        gsap.set(q("[data-step]"), { color: "#5f5b54" });
         if (mobile) gsap.set(q("[data-piece='back'], [data-desktop-only]"), { display: "none" });
 
         const tl = gsap.timeline({
@@ -89,7 +93,7 @@ export default function Maglietta() {
               },
         });
         const step = (i: number, at: number | string) =>
-          tl.to(q("[data-step]"), { opacity: (k) => (k === i ? 1 : 0.25), duration: 0.2, ease: "none" }, at);
+          tl.to(q("[data-step]"), { color: (k) => (k === i ? "#141414" : "#5f5b54"), x: (k) => (k === i ? 6 : 0), duration: 0.2, ease: "none" }, at);
 
         // 1. il rotolo si srotola
         step(0, 0);
@@ -174,7 +178,8 @@ export default function Maglietta() {
 
         if (reduced) tl.progress(1);
       });
-    },
+        }),
+      ),
     { scope: root },
   );
 
@@ -182,14 +187,14 @@ export default function Maglietta() {
     <section ref={root} id="maglietta" aria-labelledby="maglietta-title" className="relative">
       <div data-stage className="relative flex h-svh flex-col overflow-hidden md:flex-row">
         <div className="relative z-10 shrink-0 px-5 pt-20 md:w-[30%] md:px-10 md:pt-28">
-          <p className="tag text-filo">Cap. 03</p>
+          <p className="tag text-filo-ink">Cap. 03</p>
           <h2 id="maglietta-title" className="mt-2 font-display text-4xl uppercase leading-none md:text-6xl">
             Nasce una maglietta
           </h2>
           <ol className="mt-4 flex flex-wrap gap-x-3 gap-y-1 md:mt-10 md:block md:space-y-2">
             {STEPS.map((s, i) => (
               <li key={s} data-step className="tag flex items-center gap-2 md:text-sm">
-                <span className="text-filo">0{i + 1}</span>
+                <span className="text-filo-ink">0{i + 1}</span>
                 {s}
               </li>
             ))}
@@ -348,7 +353,7 @@ export default function Maglietta() {
           </svg>
 
           <p data-final className="tag absolute inset-x-5 bottom-16 text-center md:bottom-14">
-            <span data-final-code className="text-filo">ORD-TEE-01</span> · Cotone heavy jersey 240 g/m² · Made in Italy [dimostrativo]
+            <span data-final-code className="text-filo-ink">ORD-TEE-01</span> · Cotone heavy jersey 240 g/m² · Made in Italy [dimostrativo]
           </p>
         </div>
       </div>
