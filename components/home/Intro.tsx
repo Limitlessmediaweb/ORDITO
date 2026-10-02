@@ -29,7 +29,9 @@ export default function Intro() {
 
   useGSAP(
     () => {
-      const el = root.current!;
+      const el = root.current;
+      // già concluso (componente smontato): niente da fare se il contesto si riattiva
+      if (!el) return;
       const headerLogo = document.querySelector<SVGSVGElement>("[data-header-logo]");
       let seen = false;
       try {

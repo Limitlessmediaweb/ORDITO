@@ -213,7 +213,7 @@ export default function Footer() {
           <TendaLink href="/privacy" className="inline-flex min-h-11 items-center hover:text-filo">
             Privacy
           </TendaLink>
-          <a href={LIMITLESS} target="_blank" rel="noopener" className="inline-flex min-h-11 items-center hover:text-filo">
+          <a href={LIMITLESS} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center hover:text-filo">
             Realizzato da LIMITLESS ↗
           </a>
         </p>

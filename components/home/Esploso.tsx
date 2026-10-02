@@ -109,7 +109,7 @@ export default function Esploso({ corto = false }: { corto?: boolean }) {
             gsap.set(q("[data-label]"), { autoAlpha: 0 });
             gsap.set(q("[data-lead]"), { drawSVG: "0% 0%" });
             gsap.set(q("[data-dot]"), { scale: 0 });
-            gsap.set(q("[data-dark], [data-spot]"), { opacity: 0 });
+            gsap.set(q("[data-dark]"), { opacity: 0 });
             gsap.set(q("[data-count]"), { autoAlpha: 0, y: 20 });
 
             const OPEN = corto ? 0.7 : 0.55;
@@ -131,7 +131,7 @@ export default function Esploso({ corto = false }: { corto?: boolean }) {
             tl.to(q("[data-intro-copy]"), { autoAlpha: 0, y: -30, duration: 0.08 }, 0.04);
 
             // A metà la scena passa da cemento a grafite
-            tl.to(q("[data-dark], [data-spot]"), { opacity: 1, duration: 0.1 }, OPEN * 0.42);
+            tl.to(q("[data-dark]"), { opacity: 1, duration: 0.1 }, OPEN * 0.42);
             tl.to(q("[data-ink]"), { color: "#f4f1ea", duration: 0.1 }, OPEN * 0.42);
 
             PARTS.forEach((p, i) => {
@@ -168,7 +168,7 @@ export default function Esploso({ corto = false }: { corto?: boolean }) {
               tl.to(q("[data-label], [data-dot], [data-count]"), { autoAlpha: 0, duration: 0.03 }, 0.76)
                 .to(q("[data-lead]"), { drawSVG: "100% 100%", duration: 0.03 }, 0.76)
                 .to(state, { frame: 0, duration: 0.13, ease: "power2.inOut", onUpdate: schedule }, 0.78)
-                .to(q("[data-dark], [data-spot]"), { opacity: 0, duration: 0.08 }, 0.86)
+                .to(q("[data-dark]"), { opacity: 0, duration: 0.08 }, 0.86)
                 .to(q("[data-ink]"), { color: "#141414", duration: 0.08 }, 0.86)
                 .to(q("[data-outro-copy]"), { autoAlpha: 1, y: 0, duration: 0.05 }, 0.9)
                 .to({}, { duration: 0.06 });
@@ -216,7 +216,7 @@ export default function Esploso({ corto = false }: { corto?: boolean }) {
             <div
               data-spot
               aria-hidden="true"
-              className="absolute -inset-x-[40%] -inset-y-[8%] md:-inset-x-[60%] md:-inset-y-[35%] bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,#ccc8c7_76%,rgb(204_200_199/0)_100%)] opacity-0"
+              className="absolute -inset-x-[40%] -inset-y-[8%] md:-inset-x-[60%] md:-inset-y-[35%] bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,#ccc8c7_76%,rgb(204_200_199/0)_100%)]"
             />
             <div className="absolute inset-0 overflow-hidden" style={EDGE_FADE}>
               <canvas
