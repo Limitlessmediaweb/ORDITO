@@ -3,7 +3,7 @@
 import opentype from "opentype.js";
 import { readFileSync, writeFileSync } from "node:fs";
 
-const font = opentype.parse(readFileSync(new URL("./Anton-Regular.ttf", import.meta.url)).buffer);
+const font = opentype.parse(readFileSync(new URL("../assets/Anton-Regular.ttf", import.meta.url)).buffer);
 const SIZE = 1000;
 const TRACK = 40;
 const word = "ORDITO";

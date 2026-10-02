@@ -8,6 +8,8 @@ import Ago from "@/components/Ago";
 import Metro from "@/components/Metro";
 import Filo from "@/components/Filo";
 import Fondo from "@/components/Fondo";
+import GLMount from "@/components/gl/GLMount";
+import { TendaSignal } from "@/components/TendaLink";
 
 const anton = Anton({ weight: "400", subsets: ["latin"], variable: "--font-anton", display: "swap" });
 const grotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-grotesk", display: "swap" });
@@ -45,6 +47,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <Fondo />
           <Header />
           {children}
+          <TendaSignal />
+          <GLMount />
           <Filo />
           <Metro />
           <Badge />

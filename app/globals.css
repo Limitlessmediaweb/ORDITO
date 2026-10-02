@@ -129,45 +129,33 @@ html.lenis body {
 }
 
 /* ---------- View Transitions: tendina di tessuto ---------- */
-::view-transition-old(.tenda) {
-  animation: none;
-}
-::view-transition-new(.tenda) {
-  animation: tenda-giu 900ms var(--ease-sarta) both;
-  /* bordo sfilacciato: maschera a frange verticali */
-  mask-image:
-    linear-gradient(#000, #000),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60' preserveAspectRatio='none'%3E%3Cpath d='M0 0h120v22l-4 26-4-30-5 38-4-34-6 22-4-30-5 36-4-28-5 30-4-34-5 26-6-32-4 38-5-30-4 24-6-36-4 30-5-26-4 34-5-30-6 28-4-22-5 36-4-34-5 24-6-28-3 20V0z'/%3E%3C/svg%3E");
-  mask-size:
-    100% calc(var(--tenda, 0) * 1%),
-    120px 60px;
-  mask-position:
-    0 0,
-    0 calc(var(--tenda, 0) * 1%);
-  mask-repeat: no-repeat, repeat-x;
-}
 @property --tenda {
   syntax: "<number>";
   inherits: false;
   initial-value: 0;
+}
+html.vt-tenda::view-transition-old(root) {
+  animation: none;
+}
+html.vt-tenda::view-transition-new(root) {
+  animation: tenda-giu 1s var(--ease-sarta) both;
+  /* la parte piena scende; sotto pendono le frange (fili sciolti) */
+  mask-image:
+    linear-gradient(#000, #000),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'120'%20height%3D'44'%3E%3Crect%20width%3D'120'%20height%3D'6'%2F%3E%3Crect%20x%3D'0'%20y%3D'5'%20width%3D'2'%20height%3D'10'%2F%3E%3Crect%20x%3D'3'%20y%3D'5'%20width%3D'1.2'%20height%3D'16'%2F%3E%3Crect%20x%3D'6'%20y%3D'5'%20width%3D'1.2'%20height%3D'22'%2F%3E%3Crect%20x%3D'9'%20y%3D'5'%20width%3D'2'%20height%3D'28'%2F%3E%3Crect%20x%3D'12'%20y%3D'5'%20width%3D'1.2'%20height%3D'34'%2F%3E%3Crect%20x%3D'15'%20y%3D'5'%20width%3D'1.2'%20height%3D'40'%2F%3E%3Crect%20x%3D'18'%20y%3D'5'%20width%3D'2'%20height%3D'15'%2F%3E%3Crect%20x%3D'21'%20y%3D'5'%20width%3D'1.2'%20height%3D'21'%2F%3E%3Crect%20x%3D'24'%20y%3D'5'%20width%3D'1.2'%20height%3D'27'%2F%3E%3Crect%20x%3D'27'%20y%3D'5'%20width%3D'2'%20height%3D'33'%2F%3E%3Crect%20x%3D'30'%20y%3D'5'%20width%3D'1.2'%20height%3D'39'%2F%3E%3Crect%20x%3D'33'%20y%3D'5'%20width%3D'1.2'%20height%3D'14'%2F%3E%3Crect%20x%3D'36'%20y%3D'5'%20width%3D'2'%20height%3D'20'%2F%3E%3Crect%20x%3D'39'%20y%3D'5'%20width%3D'1.2'%20height%3D'26'%2F%3E%3Crect%20x%3D'42'%20y%3D'5'%20width%3D'1.2'%20height%3D'32'%2F%3E%3Crect%20x%3D'45'%20y%3D'5'%20width%3D'2'%20height%3D'38'%2F%3E%3Crect%20x%3D'48'%20y%3D'5'%20width%3D'1.2'%20height%3D'13'%2F%3E%3Crect%20x%3D'51'%20y%3D'5'%20width%3D'1.2'%20height%3D'19'%2F%3E%3Crect%20x%3D'54'%20y%3D'5'%20width%3D'2'%20height%3D'25'%2F%3E%3Crect%20x%3D'57'%20y%3D'5'%20width%3D'1.2'%20height%3D'31'%2F%3E%3Crect%20x%3D'60'%20y%3D'5'%20width%3D'1.2'%20height%3D'37'%2F%3E%3Crect%20x%3D'63'%20y%3D'5'%20width%3D'2'%20height%3D'12'%2F%3E%3Crect%20x%3D'66'%20y%3D'5'%20width%3D'1.2'%20height%3D'18'%2F%3E%3Crect%20x%3D'69'%20y%3D'5'%20width%3D'1.2'%20height%3D'24'%2F%3E%3Crect%20x%3D'72'%20y%3D'5'%20width%3D'2'%20height%3D'30'%2F%3E%3Crect%20x%3D'75'%20y%3D'5'%20width%3D'1.2'%20height%3D'36'%2F%3E%3Crect%20x%3D'78'%20y%3D'5'%20width%3D'1.2'%20height%3D'11'%2F%3E%3Crect%20x%3D'81'%20y%3D'5'%20width%3D'2'%20height%3D'17'%2F%3E%3Crect%20x%3D'84'%20y%3D'5'%20width%3D'1.2'%20height%3D'23'%2F%3E%3Crect%20x%3D'87'%20y%3D'5'%20width%3D'1.2'%20height%3D'29'%2F%3E%3Crect%20x%3D'90'%20y%3D'5'%20width%3D'2'%20height%3D'35'%2F%3E%3Crect%20x%3D'93'%20y%3D'5'%20width%3D'1.2'%20height%3D'10'%2F%3E%3Crect%20x%3D'96'%20y%3D'5'%20width%3D'1.2'%20height%3D'16'%2F%3E%3Crect%20x%3D'99'%20y%3D'5'%20width%3D'2'%20height%3D'22'%2F%3E%3Crect%20x%3D'102'%20y%3D'5'%20width%3D'1.2'%20height%3D'28'%2F%3E%3Crect%20x%3D'105'%20y%3D'5'%20width%3D'1.2'%20height%3D'34'%2F%3E%3Crect%20x%3D'108'%20y%3D'5'%20width%3D'2'%20height%3D'40'%2F%3E%3Crect%20x%3D'111'%20y%3D'5'%20width%3D'1.2'%20height%3D'15'%2F%3E%3Crect%20x%3D'114'%20y%3D'5'%20width%3D'1.2'%20height%3D'21'%2F%3E%3Crect%20x%3D'117'%20y%3D'5'%20width%3D'2'%20height%3D'27'%2F%3E%3C%2Fsvg%3E");
+  mask-size:
+    100% calc(var(--tenda) * 1vh),
+    120px 44px;
+  mask-position:
+    0 0,
+    0 calc(var(--tenda) * 1vh - 2px);
+  mask-repeat: no-repeat, repeat-x;
 }
 @keyframes tenda-giu {
   from {
     --tenda: 0;
   }
   to {
-    --tenda: 104;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-new(.tenda) {
-    animation: vt-fade 300ms ease both;
-    mask-image: none;
-  }
-  @keyframes vt-fade {
-    from {
-      opacity: 0;
-    }
+    --tenda: 106;
   }
 }

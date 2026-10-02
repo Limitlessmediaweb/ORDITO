@@ -1,4 +1,4 @@
-import Link from "next/link";
+import TendaLink from "./TendaLink";
 import Logo from "./Logo";
 
 const NAV = [
@@ -16,26 +16,24 @@ export default function Header() {
       >
         Salta al contenuto
       </a>
-      <Link
+      <TendaLink
         href="/"
-        transitionTypes={["tenda"]}
         aria-label="ORDITO, torna alla home"
         className="pointer-events-auto block"
       >
         <Logo data-header-logo title="ORDITO" className="h-7 w-auto md:h-9" />
-      </Link>
+      </TendaLink>
       <nav aria-label="Principale" className="pointer-events-auto">
         <ul className="flex gap-4 md:gap-8">
           {NAV.map((n) => (
             <li key={n.href}>
-              <Link
+              <TendaLink
                 href={n.href}
-                transitionTypes={n.href.startsWith("/#") ? undefined : ["tenda"]}
                 className="tag group relative inline-block py-2"
               >
                 {n.label}
                 <span className="absolute inset-x-0 bottom-1 h-px origin-left scale-x-0 bg-filo transition-transform duration-500 ease-[var(--ease-sarta)] group-hover:scale-x-100" />
-              </Link>
+              </TendaLink>
             </li>
           ))}
         </ul>
