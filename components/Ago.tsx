@@ -95,11 +95,7 @@ export default function Ago() {
   );
 
   return (
-    <svg
-      ref={root}
-      aria-hidden="true"
-      className="pointer-events-none invisible fixed inset-0 z-[80] h-full w-full opacity-0"
-    >
+    <svg ref={root} aria-hidden="true" className="pointer-events-none invisible fixed inset-0 z-[80] h-full w-full opacity-0">
       <path data-thread fill="none" stroke="var(--filo)" strokeWidth="1.4" strokeLinecap="round" />
       <g data-needle>
         {/* ago: punta in (0,0), cruna in alto */}

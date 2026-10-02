@@ -104,7 +104,11 @@ export default function Intro() {
         );
       });
       // 4. la trama si stringe e diventa il wordmark
-      tl.to(q("[data-weave]"), { scaleX: 0.12, scaleY: 0.5, opacity: 0, duration: 0.6, transformOrigin: "50% 50%", ease: "power3.in" }, "+=0.1")
+      tl.to(
+        q("[data-weave]"),
+        { scaleX: 0.12, scaleY: 0.5, opacity: 0, duration: 0.6, transformOrigin: "50% 50%", ease: "power3.in" },
+        "+=0.1",
+      )
         .to(q("[data-intro-logo] [data-coil]"), { drawSVG: "0% 100%", duration: 0.7, ease: "power2.out" }, "-=0.25")
         .to(q("[data-intro-logo] [data-tail]"), { drawSVG: "0% 100%", duration: 0.3 }, "-=0.2")
         .to(q("[data-intro-logo] [data-letter]"), { yPercent: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: "ago" }, "<-0.4")
@@ -112,10 +116,7 @@ export default function Intro() {
 
       // 5. il wordmark vola nell'header (Flip) e il sipario si apre
       if (headerLogo) {
-        tl.add(
-          Flip.fit(logo, headerLogo, { duration: 0.85, ease: "sarta", scale: true }) as gsap.core.Tween,
-          "vola",
-        );
+        tl.add(Flip.fit(logo, headerLogo, { duration: 0.85, ease: "sarta", scale: true }) as gsap.core.Tween, "vola");
       }
       tl.call(finish, [], "vola+=0.35")
         .to(q("[data-seam]"), { scaleY: 1, duration: 0.35, ease: "power2.out" }, "vola+=0.1")
@@ -132,12 +133,7 @@ export default function Intro() {
   if (gone) return null;
 
   return (
-    <div
-      ref={root}
-      id="intro"
-      role="presentation"
-      className="fixed inset-0 z-[70] overflow-hidden"
-    >
+    <div ref={root} id="intro" className="fixed inset-0 z-[70] overflow-hidden">
       <noscript>
         <style>{`#intro{display:none}`}</style>
       </noscript>
@@ -151,13 +147,7 @@ export default function Intro() {
 
       <svg aria-hidden="true" className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
         <g fill="none" stroke="var(--filo)" strokeLinecap="round" vectorEffect="non-scaling-stroke">
-          <path
-            data-draw
-            data-lead
-            d="M-4 58 C 8 40, 16 66, 26 52 S 40 44, 50 50"
-            strokeWidth="1.5"
-            vectorEffect="non-scaling-stroke"
-          />
+          <path data-draw data-lead d="M-4 58 C 8 40, 16 66, 26 52 S 40 44, 50 50" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
           <g data-weave>
             {Array.from({ length: WARP }, (_, i) => (
               <line key={i} data-warp x1={wx(i)} x2={wx(i)} y1="30" y2="70" strokeWidth="2" vectorEffect="non-scaling-stroke" />
@@ -180,7 +170,15 @@ export default function Intro() {
               Array.from({ length: WARP }, (_, i) =>
                 (i + j) % 2 === 0 ? (
                   <g key={`${i}-${j}`} data-over={j}>
-                    <line x1={wx(i)} x2={wx(i)} y1={wy(j) - 1.3} y2={wy(j) + 1.3} stroke="var(--cemento)" strokeWidth="5" vectorEffect="non-scaling-stroke" />
+                    <line
+                      x1={wx(i)}
+                      x2={wx(i)}
+                      y1={wy(j) - 1.3}
+                      y2={wy(j) + 1.3}
+                      stroke="var(--cemento)"
+                      strokeWidth="5"
+                      vectorEffect="non-scaling-stroke"
+                    />
                     <line x1={wx(i)} x2={wx(i)} y1={wy(j) - 1.6} y2={wy(j) + 1.6} strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
                   </g>
                 ) : null,

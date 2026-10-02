@@ -20,7 +20,11 @@ export default function SchedaTecnica({ righe, codice }: { righe: [string, strin
           tl.to(row.querySelector("[data-rule]"), { scaleX: 1, duration: 0.5, ease: "power2.inOut" }, i * 0.08)
             .to(row.querySelector("[data-k]"), { autoAlpha: 1, duration: 0.3 }, i * 0.08 + 0.2)
             .to(v, { autoAlpha: 1, duration: 0.01 }, i * 0.08 + 0.25)
-            .to(v, { scrambleText: { text: v.dataset.text!, chars: "0123456789×/·-ABCDEFGHIJKLMNOPQRSTUVWXYZ", speed: 0.6 }, duration: 0.7 }, i * 0.08 + 0.25);
+            .to(
+              v,
+              { scrambleText: { text: v.dataset.text!, chars: "0123456789×/·-ABCDEFGHIJKLMNOPQRSTUVWXYZ", speed: 0.6 }, duration: 0.7 },
+              i * 0.08 + 0.25,
+            );
         });
       });
     },

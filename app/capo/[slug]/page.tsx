@@ -62,8 +62,6 @@ export default async function CapoPage({ params }: PageProps<"/capo/[slug]">) {
         </div>
       </section>
 
-      
-
       {capo.slug === "giacca-trama" ? <Esploso corto /> : <EsplosoStrati strati={capo.strati} nome={capo.nome} />}
 
       <section aria-labelledby="galleria" className="px-4 py-20 md:px-10 md:py-32">
@@ -85,7 +83,10 @@ export default async function CapoPage({ params }: PageProps<"/capo/[slug]">) {
 
       <section className="border-t border-grafite/15 px-4 py-16 md:px-10">
         <p className="tag text-gesso-ink">Prossimo capo</p>
-        <TendaLink href={`/capo/${next.slug}`} className="group mt-2 inline-flex items-baseline gap-4 font-display text-[14vw] uppercase leading-none md:text-[7vw]">
+        <TendaLink
+          href={`/capo/${next.slug}`}
+          className="group mt-2 inline-flex items-baseline gap-4 font-display text-[14vw] uppercase leading-none md:text-[7vw]"
+        >
           {next.nome}
           <span className="text-filo-ink transition-transform duration-500 group-hover:translate-x-3">→</span>
         </TendaLink>

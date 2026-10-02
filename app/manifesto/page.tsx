@@ -20,13 +20,20 @@ export default function ManifestoPage() {
     <main id="contenuto" className="pt-28 md:pt-36">
       <section className="px-4 md:px-10">
         <p className="tag text-filo-ink">Manifesto · ORDITO</p>
-        <SplitTitle className="mt-4 font-display text-[17vw] uppercase leading-[0.86] md:text-[11vw]">Mostriamo come si finiscono.</SplitTitle>
+        <SplitTitle className="mt-4 font-display text-[17vw] uppercase leading-[0.86] md:text-[11vw]">
+          Mostriamo come si finiscono.
+        </SplitTitle>
       </section>
 
       <section aria-label="Testo del manifesto" className="px-4 py-24 md:px-10 md:py-40">
         <Cucito
           className="max-w-[18ch] font-display text-[12vw] uppercase leading-[0.95] md:text-[6.4vw]"
-          righe={["L'ordito sono i fili tesi del telaio.", "Tutto il resto ci passa sopra e sotto.", "Non vendiamo capi finiti.", "Mostriamo come si finiscono."]}
+          righe={[
+            "L'ordito sono i fili tesi del telaio.",
+            "Tutto il resto ci passa sopra e sotto.",
+            "Non vendiamo capi finiti.",
+            "Mostriamo come si finiscono.",
+          ]}
         />
       </section>
 

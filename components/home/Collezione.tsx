@@ -15,38 +15,58 @@ export default function Collezione() {
     (_, contextSafe) =>
       deferInit(
         contextSafe!(() => {
-      const q = gsap.utils.selector(root);
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const track = q("[data-track]")[0] as HTMLElement;
-        const dist = () => track.scrollWidth - innerWidth;
-        gsap.to(track, {
-          x: () => -dist(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top top",
-            end: () => `+=${dist()}`,
-            pin: q("[data-stage]")[0],
-            scrub: 0.5,
-            invalidateOnRefresh: true,
-            anticipatePin: 1,
-          },
-        });
-        // il filo di cucitura sotto le card si "tira"
-        gsap.fromTo(
-          q("[data-seam]"),
-          { scaleX: 0 },
-          {
-            scaleX: 1,
-            ease: "none",
-            scrollTrigger: { trigger: root.current, start: "top top", end: () => `+=${dist()}`, scrub: true, invalidateOnRefresh: true },
-          },
-        );
-      });
-      mm.add(MQ.reduced, () => {
-        gsap.set(q("[data-track]"), { x: 0 });
-      });
+          const q = gsap.utils.selector(root);
+          const mm = gsap.matchMedia();
+          mm.add("(prefers-reduced-motion: no-preference)", () => {
+            const track = q("[data-track]")[0] as HTMLElement;
+            const dist = () => track.scrollWidth - innerWidth;
+            const tween = gsap.to(track, {
+              x: () => -dist(),
+              ease: "none",
+              scrollTrigger: {
+                trigger: root.current,
+                start: "top top",
+                end: () => `+=${dist()}`,
+                pin: q("[data-stage]")[0],
+                scrub: 0.5,
+                invalidateOnRefresh: true,
+                anticipatePin: 1,
+              },
+            });
+            // tastiera: il capo che riceve il focus viene portato in vista scorrendo la pagina
+            const onFocus = (e: FocusEvent) => {
+              const li = (e.target as HTMLElement).closest("li");
+              const st = tween.scrollTrigger;
+              if (!li || !st) return;
+              const want = gsap.utils.clamp(0, dist(), li.offsetLeft - innerWidth * 0.3);
+              window.scrollTo({
+                top: st.start + (want / Math.max(1, dist())) * (st.end - st.start),
+                behavior: "instant" as ScrollBehavior,
+              });
+            };
+            track.addEventListener("focusin", onFocus);
+
+            // il filo di cucitura sotto le card si "tira"
+            gsap.fromTo(
+              q("[data-seam]"),
+              { scaleX: 0 },
+              {
+                scaleX: 1,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: root.current,
+                  start: "top top",
+                  end: () => `+=${dist()}`,
+                  scrub: true,
+                  invalidateOnRefresh: true,
+                },
+              },
+            );
+            return () => track.removeEventListener("focusin", onFocus);
+          });
+          mm.add(MQ.reduced, () => {
+            gsap.set(q("[data-track]"), { x: 0 });
+          });
         }),
       ),
     { scope: root },
@@ -73,7 +93,11 @@ export default function Collezione() {
             </li>
           ))}
         </ul>
-        <span data-seam aria-hidden="true" className="absolute bottom-8 left-0 h-px w-full origin-left border-t border-dashed border-filo md:bottom-10" />
+        <span
+          data-seam
+          aria-hidden="true"
+          className="absolute bottom-8 left-0 h-px w-full origin-left border-t border-dashed border-filo md:bottom-10"
+        />
       </div>
     </section>
   );

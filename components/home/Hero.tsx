@@ -18,7 +18,12 @@ export default function Hero() {
         const { motion, fine } = ctx.conditions as { motion: boolean; fine: boolean };
         if (!motion) return;
 
-        const split = SplitText.create(q("[data-title] > span"), { type: "lines,chars", mask: "lines", linesClass: "split-line", aria: "none" });
+        const split = SplitText.create(q("[data-title] > span"), {
+          type: "lines,chars",
+          mask: "lines",
+          linesClass: "split-line",
+          aria: "none",
+        });
         gsap.set(split.chars, { yPercent: 110 });
         // la giacca resta sempre dipinta (è l'elemento LCP): entra solo con transform
         gsap.set(q("[data-jacket]"), { y: 40, scale: 0.96 });
@@ -76,15 +81,19 @@ export default function Hero() {
   );
 
   return (
-    <section ref={root} aria-labelledby="hero-title" className="crocini relative grid h-svh min-h-[560px] place-items-center overflow-hidden">
+    <section
+      ref={root}
+      aria-labelledby="hero-title"
+      className="crocini relative grid h-svh min-h-[560px] place-items-center overflow-hidden"
+    >
       <h1
         id="hero-title"
         aria-label="Ogni capo inizia da un filo"
         data-title
-        className="pointer-events-none absolute inset-x-0 top-[17%] z-0 select-none text-center font-display uppercase leading-[0.86] tracking-[-0.01em] text-grafite md:top-[12%]"
+        className="pointer-events-none absolute inset-x-0 top-[21%] z-0 select-none text-center font-display uppercase leading-[0.86] tracking-[-0.01em] text-grafite md:top-[12%]"
       >
-        <span className="block text-[19vw]">Ogni capo</span>
-        <span className="block text-[11.6vw] md:mt-[1vw]">inizia da un filo</span>
+        <span className="block text-[23vw] md:text-[19vw]">Ogni capo</span>
+        <span className="block text-[13.8vw] md:mt-[1vw] md:text-[11.6vw]">inizia da un filo</span>
       </h1>
 
       <div className="relative z-10 [perspective:1100px]" data-tilt-wrap>
@@ -98,7 +107,7 @@ export default function Hero() {
                 height={1607}
                 priority
                 sizes="(max-width: 768px) 76vw, 40vh"
-                className="mt-[10svh] h-[62svh] w-auto max-w-[86vw] object-contain drop-shadow-[0_30px_40px_rgba(20,20,20,0.18)] md:mt-[8svh] md:h-[74svh]"
+                className="mt-[16svh] h-[58svh] w-auto max-w-[86vw] object-contain drop-shadow-[0_30px_40px_rgba(20,20,20,0.18)] md:mt-[8svh] md:h-[74svh]"
               />
             </div>
           </div>
@@ -122,14 +131,7 @@ export default function Hero() {
         </span>
         <svg aria-hidden="true" width="24" height="56" viewBox="0 0 24 56" fill="none">
           <path data-stitch d="M12 2 V48" stroke="var(--grafite)" strokeOpacity="0.25" strokeWidth="1" />
-          <path
-            data-stitch-arrow
-            d="M12 2 V48"
-            stroke="var(--filo)"
-            strokeWidth="2"
-            strokeDasharray="4 4"
-            strokeLinecap="round"
-          />
+          <path data-stitch-arrow d="M12 2 V48" stroke="var(--filo)" strokeWidth="2" strokeDasharray="4 4" strokeLinecap="round" />
           <path data-stitch d="M5 41 L12 50 L19 41" stroke="var(--filo)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>

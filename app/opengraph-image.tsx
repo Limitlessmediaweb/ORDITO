@@ -19,22 +19,22 @@ const logoSvg = `data:image/svg+xml;base64,${Buffer.from(
 
 export default async function Image() {
   return new ImageResponse(
-    (
-      <div style={{ width: "100%", height: "100%", display: "flex", background: "#D9D6D0", position: "relative", fontFamily: "Anton" }}>
-        <div style={{ position: "absolute", left: 0, right: 0, top: 300, height: 3, background: "#E8432E", display: "flex" }} />
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "56px 64px", width: 760 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logoSvg} width={300} height={Math.round((300 * LOGO.height) / LOGO.width)} alt="" />
-          <div style={{ display: "flex", flexDirection: "column", fontSize: 104, lineHeight: 0.9, color: "#141414", textTransform: "uppercase" }}>
-            <span>Ogni capo</span>
-            <span>inizia da un filo.</span>
-          </div>
-          <span style={{ fontSize: 22, letterSpacing: 4, color: "#5f5b54" }}>CONCEPT — LIMITLESS</span>
-        </div>
+    <div style={{ width: "100%", height: "100%", display: "flex", background: "#D9D6D0", position: "relative", fontFamily: "Anton" }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 300, height: 3, background: "#E8432E", display: "flex" }} />
+      <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "56px 64px", width: 760 }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={jacket} height={560} style={{ position: "absolute", right: 70, top: 36 }} alt="" />
+        <img src={logoSvg} width={300} height={Math.round((300 * LOGO.height) / LOGO.width)} alt="" />
+        <div
+          style={{ display: "flex", flexDirection: "column", fontSize: 104, lineHeight: 0.9, color: "#141414", textTransform: "uppercase" }}
+        >
+          <span>Ogni capo</span>
+          <span>inizia da un filo.</span>
+        </div>
+        <span style={{ fontSize: 22, letterSpacing: 4, color: "#5f5b54" }}>CONCEPT — LIMITLESS</span>
       </div>
-    ),
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={jacket} height={560} style={{ position: "absolute", right: 70, top: 36 }} alt="" />
+    </div>,
     { ...size, fonts: [{ name: "Anton", data: anton, style: "normal", weight: 400 }] },
   );
 }

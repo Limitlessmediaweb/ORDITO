@@ -7,7 +7,11 @@ import { glBus } from "@/lib/glbus";
 
 /** L'unico <Canvas> del sito: fisso a tutto schermo, disegna solo dentro le <View> attive. */
 export default function GLRoot() {
-  const active = useSyncExternalStore(glBus.subscribe, () => glBus.active, () => false);
+  const active = useSyncExternalStore(
+    glBus.subscribe,
+    () => glBus.active,
+    () => false,
+  );
   return (
     <Canvas
       eventSource={typeof document !== "undefined" ? document.body : undefined}

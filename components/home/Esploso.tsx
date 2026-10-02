@@ -50,156 +50,151 @@ export default function Esploso({ corto = false }: { corto?: boolean }) {
     (_, contextSafe) =>
       deferInit(
         contextSafe!(() => {
-      const q = gsap.utils.selector(root);
-      const mm = gsap.matchMedia();
+          const q = gsap.utils.selector(root);
+          const mm = gsap.matchMedia();
 
-      mm.add({ desktop: MQ.desktop, mobile: MQ.mobile }, (ctx) => {
-        const { desktop, mobile } = ctx.conditions as { desktop: boolean; mobile: boolean };
-        if (!desktop && !mobile) return;
+          mm.add({ desktop: MQ.desktop, mobile: MQ.mobile }, (ctx) => {
+            const { desktop, mobile } = ctx.conditions as { desktop: boolean; mobile: boolean };
+            if (!desktop && !mobile) return;
 
-        const seq = desktop ? createSequence("/media/jacket-seq/d", 120) : createSequence("/media/jacket-seq/m", 60);
-        const cv = canvas.current!;
-        const c2d = cv.getContext("2d", { alpha: false })!;
-        const state = { frame: 0 };
-        let drawn = -1;
-        let raf = 0;
+            const seq = desktop ? createSequence("/media/jacket-seq/d", 120) : createSequence("/media/jacket-seq/m", 60);
+            const cv = canvas.current!;
+            const c2d = cv.getContext("2d", { alpha: false })!;
+            const state = { frame: 0 };
+            let drawn = -1;
+            let raf = 0;
 
-        const size = () => {
-          const r = cv.getBoundingClientRect();
-          const dpr = Math.min(window.devicePixelRatio || 1, desktop ? 2 : 2);
-          cv.width = Math.round(r.width * dpr);
-          cv.height = Math.round(r.height * dpr);
-          drawn = -1;
-          paint();
-        };
-        const paint = () => {
-          const i = Math.round(state.frame * (seq.count - 1));
-          const img = seq.nearest(i);
-          if (!img) {
-            // nessun frame ancora: stesso grigio del video, mai un rettangolo nero
-            c2d.fillStyle = "#ccc8c7";
-            c2d.fillRect(0, 0, cv.width, cv.height);
-            return;
-          }
-          const key = seq.frames[i] ? i : -2 - i; // ridisegna quando arriva il frame esatto
-          if (key === drawn) return;
-          drawn = key;
-          c2d.drawImage(img, 0, 0, cv.width, cv.height);
-        };
-        const schedule = () => {
-          if (raf) return;
-          raf = requestAnimationFrame(() => {
-            raf = 0;
-            paint();
-          });
-        };
-        seq.onFrame(schedule);
+            const size = () => {
+              const r = cv.getBoundingClientRect();
+              const dpr = Math.min(window.devicePixelRatio || 1, desktop ? 2 : 2);
+              cv.width = Math.round(r.width * dpr);
+              cv.height = Math.round(r.height * dpr);
+              drawn = -1;
+              paint();
+            };
+            const paint = () => {
+              const i = Math.round(state.frame * (seq.count - 1));
+              const img = seq.nearest(i);
+              if (!img) {
+                // nessun frame ancora: stesso grigio del video, mai un rettangolo nero
+                c2d.fillStyle = "#ccc8c7";
+                c2d.fillRect(0, 0, cv.width, cv.height);
+                return;
+              }
+              const key = seq.frames[i] ? i : -2 - i; // ridisegna quando arriva il frame esatto
+              if (key === drawn) return;
+              drawn = key;
+              c2d.drawImage(img, 0, 0, cv.width, cv.height);
+            };
+            const schedule = () => {
+              if (raf) return;
+              raf = requestAnimationFrame(() => {
+                raf = 0;
+                paint();
+              });
+            };
+            seq.onFrame(schedule);
 
-        // Il caricamento parte alla prima interazione o quando la sezione si avvicina.
-        const kick = () => seq.start();
-        const evts = ["wheel", "touchstart", "keydown", "scroll", "pointerdown"] as const;
-        evts.forEach((e) => window.addEventListener(e, kick, { once: true, passive: true }));
-        if (corto) kick();
+            // Il caricamento parte alla prima interazione o quando la sezione si avvicina.
+            const kick = () => seq.start();
+            const evts = ["wheel", "touchstart", "keydown", "scroll", "pointerdown"] as const;
+            evts.forEach((e) => window.addEventListener(e, kick, { once: true, passive: true }));
+            if (corto) kick();
 
-        size();
-        const ro = new ResizeObserver(size);
-        ro.observe(cv);
+            size();
+            const ro = new ResizeObserver(size);
+            ro.observe(cv);
 
-        // ---------- timeline ----------
-        gsap.set(q("[data-label]"), { autoAlpha: 0 });
-        gsap.set(q("[data-lead]"), { drawSVG: "0% 0%" });
-        gsap.set(q("[data-dot]"), { scale: 0 });
-        gsap.set(q("[data-dark], [data-spot]"), { opacity: 0 });
-        gsap.set(q("[data-count]"), { autoAlpha: 0, y: 20 });
+            // ---------- timeline ----------
+            gsap.set(q("[data-label]"), { autoAlpha: 0 });
+            gsap.set(q("[data-lead]"), { drawSVG: "0% 0%" });
+            gsap.set(q("[data-dot]"), { scale: 0 });
+            gsap.set(q("[data-dark], [data-spot]"), { opacity: 0 });
+            gsap.set(q("[data-count]"), { autoAlpha: 0, y: 20 });
 
-        const OPEN = corto ? 0.7 : 0.55;
-        const tl = gsap.timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top top",
-            end: corto ? "+=220%" : desktop ? "+=380%" : "+=340%",
-            pin: q("[data-stage]")[0],
-            scrub: desktop ? 0.6 : true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => setTone("esploso", self.isActive && self.progress > OPEN * 0.45 && self.progress < (corto ? 2 : 0.88)),
-            onToggle: (self) => !self.isActive && setTone("esploso", false),
-          },
-        });
-        tl.to(state, { frame: 1, duration: OPEN, onUpdate: schedule }, 0);
-        tl.to(q("[data-intro-copy]"), { autoAlpha: 0, y: -30, duration: 0.08 }, 0.04);
-
-        // A metà la scena passa da cemento a grafite
-        tl.to(q("[data-dark], [data-spot]"), { opacity: 1, duration: 0.1 }, OPEN * 0.42);
-        tl.to(q("[data-ink]"), { color: "#f4f1ea", duration: 0.1 }, OPEN * 0.42);
-
-        PARTS.forEach((p, i) => {
-          const at = OPEN * 0.38 + i * 0.035;
-          tl.to(q(`[data-dot='${p.n}']`), { scale: 1, duration: 0.02, ease: "back.out(3)" }, at)
-            .to(q(`[data-lead='${p.n}']`), { drawSVG: "0% 100%", duration: 0.05 }, at)
-            .to(q(`[data-label='${p.n}']`), { autoAlpha: 1, duration: 0.02 }, at + 0.02)
-            .to(
-              q(`[data-label='${p.n}'] [data-code]`),
-              { scrambleText: { text: code(p.n), chars: "0123456789-/ORDJKT", speed: 0.6 }, duration: 0.06 },
-              at + 0.02,
-            );
-        });
-
-        if (!corto) {
-          // contatore finale
-          const n = { c: 0, s: 0 };
-          if (mobile) tl.to(q("[data-legend]"), { autoAlpha: 0, duration: 0.03 }, 0.58).set(q("[data-legend]"), { autoAlpha: 1 }, 0.79);
-          tl.to(q("[data-count]"), { autoAlpha: 1, y: 0, duration: 0.04 }, 0.6).to(
-            n,
-            {
-              c: 7,
-              s: 214,
-              duration: 0.08,
-              onUpdate: () => {
-                const el = q("[data-count-n]");
-                if (el[0]) el[0].textContent = String(Math.round(n.c));
-                if (el[1]) el[1].textContent = String(Math.round(n.s));
+            const OPEN = corto ? 0.7 : 0.55;
+            const tl = gsap.timeline({
+              defaults: { ease: "none" },
+              scrollTrigger: {
+                trigger: root.current,
+                start: "top top",
+                end: corto ? "+=220%" : desktop ? "+=380%" : "+=340%",
+                pin: q("[data-stage]")[0],
+                scrub: desktop ? 0.6 : true,
+                anticipatePin: 1,
+                invalidateOnRefresh: true,
+                onUpdate: (self) => setTone("esploso", self.isActive && self.progress > OPEN * 0.45 && self.progress < (corto ? 2 : 0.88)),
+                onToggle: (self) => !self.isActive && setTone("esploso", false),
               },
-            },
-            0.6,
-          );
-          // ricomposizione veloce (sequenza al contrario)
-          tl.to(q("[data-label], [data-dot], [data-count]"), { autoAlpha: 0, duration: 0.03 }, 0.76)
-            .to(q("[data-lead]"), { drawSVG: "100% 100%", duration: 0.03 }, 0.76)
-            .to(state, { frame: 0, duration: 0.13, ease: "power2.inOut", onUpdate: schedule }, 0.78)
-            .to(q("[data-dark], [data-spot]"), { opacity: 0, duration: 0.08 }, 0.86)
-            .to(q("[data-ink]"), { color: "#141414", duration: 0.08 }, 0.86)
-            .to(q("[data-outro-copy]"), { autoAlpha: 1, y: 0, duration: 0.05 }, 0.9)
-            .to({}, { duration: 0.06 });
-        } else {
-          tl.to({}, { duration: 0.2 });
-        }
+            });
+            tl.to(state, { frame: 1, duration: OPEN, onUpdate: schedule }, 0);
+            tl.to(q("[data-intro-copy]"), { autoAlpha: 0, y: -30, duration: 0.08 }, 0.04);
 
-        return () => {
-          setTone("esploso", false);
-          evts.forEach((e) => window.removeEventListener(e, kick));
-          ro.disconnect();
-          cancelAnimationFrame(raf);
-        };
-      });
+            // A metà la scena passa da cemento a grafite
+            tl.to(q("[data-dark], [data-spot]"), { opacity: 1, duration: 0.1 }, OPEN * 0.42);
+            tl.to(q("[data-ink]"), { color: "#f4f1ea", duration: 0.1 }, OPEN * 0.42);
 
-      // reduced motion: immagine finale statica con etichette visibili
-      mm.add(MQ.reduced, () => {
-        gsap.set(q("[data-label], [data-count]"), { autoAlpha: 1 });
-      });
+            PARTS.forEach((p, i) => {
+              const at = OPEN * 0.38 + i * 0.035;
+              tl.to(q(`[data-dot='${p.n}']`), { scale: 1, duration: 0.02, ease: "back.out(3)" }, at)
+                .to(q(`[data-lead='${p.n}']`), { drawSVG: "0% 100%", duration: 0.05 }, at)
+                .to(q(`[data-label='${p.n}']`), { autoAlpha: 1, duration: 0.02 }, at + 0.02)
+                .to(
+                  q(`[data-label='${p.n}'] [data-code]`),
+                  { scrambleText: { text: code(p.n), chars: "0123456789-/ORDJKT", speed: 0.6 }, duration: 0.06 },
+                  at + 0.02,
+                );
+            });
+
+            if (!corto) {
+              // contatore finale
+              const n = { c: 0, s: 0 };
+              if (mobile) tl.to(q("[data-legend]"), { autoAlpha: 0, duration: 0.03 }, 0.58).set(q("[data-legend]"), { autoAlpha: 1 }, 0.79);
+              tl.to(q("[data-count]"), { autoAlpha: 1, y: 0, duration: 0.04 }, 0.6).to(
+                n,
+                {
+                  c: 7,
+                  s: 214,
+                  duration: 0.08,
+                  onUpdate: () => {
+                    const el = q("[data-count-n]");
+                    if (el[0]) el[0].textContent = String(Math.round(n.c));
+                    if (el[1]) el[1].textContent = String(Math.round(n.s));
+                  },
+                },
+                0.6,
+              );
+              // ricomposizione veloce (sequenza al contrario)
+              tl.to(q("[data-label], [data-dot], [data-count]"), { autoAlpha: 0, duration: 0.03 }, 0.76)
+                .to(q("[data-lead]"), { drawSVG: "100% 100%", duration: 0.03 }, 0.76)
+                .to(state, { frame: 0, duration: 0.13, ease: "power2.inOut", onUpdate: schedule }, 0.78)
+                .to(q("[data-dark], [data-spot]"), { opacity: 0, duration: 0.08 }, 0.86)
+                .to(q("[data-ink]"), { color: "#141414", duration: 0.08 }, 0.86)
+                .to(q("[data-outro-copy]"), { autoAlpha: 1, y: 0, duration: 0.05 }, 0.9)
+                .to({}, { duration: 0.06 });
+            } else {
+              tl.to({}, { duration: 0.2 });
+            }
+
+            return () => {
+              setTone("esploso", false);
+              evts.forEach((e) => window.removeEventListener(e, kick));
+              ro.disconnect();
+              cancelAnimationFrame(raf);
+            };
+          });
+
+          // reduced motion: immagine finale statica con etichette visibili
+          mm.add(MQ.reduced, () => {
+            gsap.set(q("[data-label], [data-count]"), { autoAlpha: 1 });
+          });
         }),
       ),
     { scope: root },
   );
 
   return (
-    <section
-      ref={root}
-      id="anatomia"
-      aria-labelledby="anatomia-title"
-      className="relative"
-    >
+    <section ref={root} id="anatomia" aria-labelledby="anatomia-title" className="relative">
       <div data-stage className="relative h-svh overflow-hidden">
         <div data-dark aria-hidden="true" className="absolute inset-0 bg-grafite" />
 
@@ -218,7 +213,11 @@ export default function Esploso({ corto = false }: { corto?: boolean }) {
 
           {/* palco: canvas + etichette nello stesso sistema di coordinate */}
           <div className="relative aspect-[1192/1600] h-[min(84svh,128vw)] md:h-[86svh]">
-            <div data-spot aria-hidden="true" className="absolute -inset-x-[60%] -inset-y-[35%] bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,#ccc8c7_76%,rgb(204_200_199/0)_100%)] opacity-0" />
+            <div
+              data-spot
+              aria-hidden="true"
+              className="absolute -inset-x-[40%] -inset-y-[8%] md:-inset-x-[60%] md:-inset-y-[35%] bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,#ccc8c7_76%,rgb(204_200_199/0)_100%)] opacity-0"
+            />
             <div className="absolute inset-0 overflow-hidden" style={EDGE_FADE}>
               <canvas
                 ref={canvas}
@@ -235,7 +234,12 @@ export default function Esploso({ corto = false }: { corto?: boolean }) {
               />
             </div>
 
-            <svg aria-hidden="true" className="pointer-events-none absolute inset-0 hidden h-full w-full overflow-visible md:block" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <svg
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 hidden h-full w-full overflow-visible md:block"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+            >
               {PARTS.map((p) => {
                 const ax = p.a[0] * 100;
                 const ay = p.a[1] * 100;
@@ -289,13 +293,13 @@ export default function Esploso({ corto = false }: { corto?: boolean }) {
           </div>
 
           {/* legenda (mobile) */}
-          <ol data-legend className="mt-3 grid w-full grid-cols-2 gap-x-4 gap-y-1.5 px-5 md:hidden">
+          <ol data-legend className="relative z-10 mt-3 grid w-full grid-cols-2 gap-x-4 gap-y-1.5 px-5 md:hidden">
             {PARTS.map((p) => (
               <li key={p.n} data-label={p.n} className="flex items-baseline gap-2">
                 <span className="font-mono text-[10px] text-filo">{p.n}</span>
                 <span>
                   <span className="block font-display text-base uppercase leading-none">{p.nome}</span>
-                  <span data-code className="tag block text-[0.6rem] opacity-70">
+                  <span data-code className="tag block text-[0.65rem] opacity-80">
                     {code(p.n)}
                   </span>
                 </span>

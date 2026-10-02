@@ -8,12 +8,36 @@ import { setTone } from "@/lib/tone";
 import { useViewportKey } from "@/lib/useViewportKey";
 
 const LOOKS = [
-  { img: "/media/look-1.webp", alt: "Modella con la giacca imbottita nera su una scala di cemento, luce dura", cap: "Look 01 — ORD-JKT-01 · Scale" },
-  { img: "/media/look-2.webp", alt: "Modella con la t-shirt pesante color carta appoggiata a un muro di cemento", cap: "Look 02 — ORD-TEE-01 · Muro" },
-  { img: "/media/look-3.webp", alt: "Mani che regolano la coulisse di una giacca tecnica nera con cappuccio", cap: "Look 03 — Coulisse · Dettaglio" },
-  { img: "/media/look-4.webp", alt: "Modella che cammina in un sottopassaggio con la sovracamicia in lana cotta", cap: "Look 04 — ORD-OVS-01 · Sottopasso" },
-  { img: "/media/look-5.webp", alt: "Due modelli seduti su gradini di cemento con giacche tecniche e t-shirt grigie", cap: "Look 05 — Gradini" },
-  { img: "/media/look-6.webp", alt: "Modella di spalle su un tetto di cemento con il cappuccio della giacca alzato", cap: "Look 06 — ORD-JKT-01 · Tetto" },
+  {
+    img: "/media/look-1.webp",
+    alt: "Modella con la giacca imbottita nera su una scala di cemento, luce dura",
+    cap: "Look 01 — ORD-JKT-01 · Scale",
+  },
+  {
+    img: "/media/look-2.webp",
+    alt: "Modella con la t-shirt pesante color carta appoggiata a un muro di cemento",
+    cap: "Look 02 — ORD-TEE-01 · Muro",
+  },
+  {
+    img: "/media/look-3.webp",
+    alt: "Mani che regolano la coulisse di una giacca tecnica nera con cappuccio",
+    cap: "Look 03 — Coulisse · Dettaglio",
+  },
+  {
+    img: "/media/look-4.webp",
+    alt: "Modella che cammina in un sottopassaggio con la sovracamicia in lana cotta",
+    cap: "Look 04 — ORD-OVS-01 · Sottopasso",
+  },
+  {
+    img: "/media/look-5.webp",
+    alt: "Due modelli seduti su gradini di cemento con giacche tecniche e t-shirt grigie",
+    cap: "Look 05 — Gradini",
+  },
+  {
+    img: "/media/look-6.webp",
+    alt: "Modella di spalle su un tetto di cemento con il cappuccio della giacca alzato",
+    cap: "Look 06 — ORD-JKT-01 · Tetto",
+  },
 ];
 
 const RIGHE = [
@@ -35,87 +59,91 @@ export default function LookbookManifesto() {
     (_, contextSafe) =>
       deferInit(
         contextSafe!(() => {
-      const q = gsap.utils.selector(root);
-      const mm = gsap.matchMedia();
-      mm.add({ desktop: MQ.desktop, mobile: MQ.mobile }, (ctx) => {
-        const { desktop, mobile } = ctx.conditions as { desktop: boolean; mobile: boolean };
-        if (!desktop && !mobile) return;
-        const looks = q("[data-look]");
-        const inner = q("[data-look-img]");
-        const caps = q("[data-look-cap]");
-        const last = looks[looks.length - 1] as HTMLElement;
-        const card = q("[data-card]")[0] as HTMLElement;
+          const q = gsap.utils.selector(root);
+          const mm = gsap.matchMedia();
+          mm.add({ desktop: MQ.desktop, mobile: MQ.mobile }, (ctx) => {
+            const { desktop, mobile } = ctx.conditions as { desktop: boolean; mobile: boolean };
+            if (!desktop && !mobile) return;
+            const looks = q("[data-look]");
+            const inner = q("[data-look-img]");
+            const caps = q("[data-look-cap]");
+            const last = looks[looks.length - 1] as HTMLElement;
+            const card = q("[data-card]")[0] as HTMLElement;
 
-        gsap.set(looks.slice(1), { clipPath: "inset(100% 0% 0% 0%)" });
-        gsap.set(inner, { scale: 1.25 });
-        gsap.set(caps, { autoAlpha: 0 });
-        gsap.set(caps[0], { autoAlpha: 1 });
-        gsap.set(q("[data-word]"), { yPercent: 105 });
-        gsap.set(q("[data-dash]"), { scaleX: 0, transformOrigin: "0% 50%" });
-        gsap.set(q("[data-card-cap]"), { autoAlpha: 0 });
-        gsap.set(q("[data-manifesto-head]"), { autoAlpha: 0, y: 20 });
+            gsap.set(looks.slice(1), { clipPath: "inset(100% 0% 0% 0%)" });
+            gsap.set(inner, { scale: 1.25 });
+            gsap.set(caps, { autoAlpha: 0 });
+            gsap.set(caps[0], { autoAlpha: 1 });
+            gsap.set(q("[data-word]"), { yPercent: 105 });
+            gsap.set(q("[data-dash]"), { scaleX: 0, transformOrigin: "0% 50%" });
+            gsap.set(q("[data-card-cap]"), { autoAlpha: 0 });
+            gsap.set(q("[data-manifesto-head]"), { autoAlpha: 0, y: 20 });
 
-        const N = LOOKS.length;
-        const tl = gsap.timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top top",
-            end: mobile ? "+=520%" : "+=640%",
-            pin: q("[data-stage]")[0],
-            scrub: mobile ? true : 0.6,
-            anticipatePin: 1,
-            onUpdate: (s) => setTone("lookbook", s.isActive && s.progress < 0.72),
-            onToggle: (s) => !s.isActive && setTone("lookbook", false),
-          },
-        });
+            const N = LOOKS.length;
+            const tl = gsap.timeline({
+              defaults: { ease: "none" },
+              scrollTrigger: {
+                trigger: root.current,
+                start: "top top",
+                end: mobile ? "+=520%" : "+=640%",
+                pin: q("[data-stage]")[0],
+                scrub: mobile ? true : 0.6,
+                anticipatePin: 1,
+                onUpdate: (s) => setTone("lookbook", s.isActive && s.progress < 0.72),
+                onToggle: (s) => !s.isActive && setTone("lookbook", false),
+              },
+            });
 
-        // foto: reveal a maschera dal basso + zoom-out interno
-        tl.to(inner[0], { scale: 1, duration: 1 }, 0);
-        for (let i = 1; i < N; i++) {
-          const at = i;
-          tl.to(looks[i], { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut" }, at)
-            .to(inner[i], { scale: 1, duration: 1.2 }, at)
-            .to(caps[i - 1], { autoAlpha: 0, duration: 0.1 }, at)
-            .to(caps[i], { autoAlpha: 1, duration: 0.1 }, at + 0.5);
-        }
-        // testo cinetico: tre righe a velocità diverse
-        const kin = q("[data-kin]");
-        tl.fromTo(kin[0], { xPercent: 0 }, { xPercent: -45, duration: N }, 0)
-          .fromTo(kin[1], { xPercent: -50 }, { xPercent: -10, duration: N }, 0)
-          .fromTo(kin[2], { xPercent: -5 }, { xPercent: -30, duration: N }, 0);
+            // foto: reveal a maschera dal basso + zoom-out interno
+            tl.to(inner[0], { scale: 1, duration: 1 }, 0);
+            for (let i = 1; i < N; i++) {
+              const at = i;
+              tl.to(looks[i], { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut" }, at)
+                .to(inner[i], { scale: 1, duration: 1.2 }, at)
+                .to(caps[i - 1], { autoAlpha: 0, duration: 0.1 }, at)
+                .to(caps[i], { autoAlpha: 1, duration: 0.1 }, at + 0.5);
+            }
+            // testo cinetico: tre righe a velocità diverse
+            const kin = q("[data-kin]");
+            tl.fromTo(kin[0], { xPercent: 0 }, { xPercent: -45, duration: N }, 0)
+              .fromTo(kin[1], { xPercent: -50 }, { xPercent: -10, duration: N }, 0)
+              .fromTo(kin[2], { xPercent: -5 }, { xPercent: -30, duration: N }, 0);
 
-        // l'ultima foto si rimpicciolisce e diventa la card (Flip)
-        const shrinkAt = N + 0.2;
-        // Flip.fit calcola posizione e scala verso la card; l'immagine interna compensa la scala
-        // non uniforme così la foto resta in "cover" senza deformarsi.
-        const fit = Flip.fit(last, card, { scale: true, getVars: true }) as gsap.TweenVars;
-        const sx = Number(fit.scaleX ?? 1);
-        const sy = Number(fit.scaleY ?? 1);
-        const cover = Math.max(sx, sy);
-        tl.to(q("[data-kin-wrap], [data-look-cap]"), { autoAlpha: 0, duration: 0.25 }, shrinkAt - 0.1)
-          .set(looks.slice(0, -1), { autoAlpha: 0 }, shrinkAt)
-          .to(last, { ...fit, duration: 1, ease: "power2.inOut" }, shrinkAt)
-          .to(inner[N - 1], { scaleX: cover / sx, scaleY: cover / sy, duration: 1, ease: "power2.inOut" }, shrinkAt)
-          .to(q("[data-card-cap]"), { autoAlpha: 1, duration: 0.2 }, shrinkAt + 0.9)
-          .to(q("[data-manifesto-head]"), { autoAlpha: 1, y: 0, duration: 0.3 }, shrinkAt + 0.6);
+            // l'ultima foto si rimpicciolisce e diventa la card (Flip)
+            const shrinkAt = N + 0.2;
+            // Flip.fit calcola posizione e scala verso la card; l'immagine interna compensa la scala
+            // non uniforme così la foto resta in "cover" senza deformarsi.
+            const fit = Flip.fit(last, card, { scale: true, getVars: true }) as gsap.TweenVars;
+            const sx = Number(fit.scaleX ?? 1);
+            const sy = Number(fit.scaleY ?? 1);
+            const cover = Math.max(sx, sy);
+            tl.to(q("[data-kin-wrap], [data-look-cap]"), { autoAlpha: 0, duration: 0.25 }, shrinkAt - 0.1)
+              .set(looks.slice(0, -1), { autoAlpha: 0 }, shrinkAt)
+              .to(last, { ...fit, duration: 1, ease: "power2.inOut" }, shrinkAt)
+              .to(inner[N - 1], { scaleX: cover / sx, scaleY: cover / sy, duration: 1, ease: "power2.inOut" }, shrinkAt)
+              .to(q("[data-card-cap]"), { autoAlpha: 1, duration: 0.2 }, shrinkAt + 0.9)
+              .to(q("[data-manifesto-head]"), { autoAlpha: 1, y: 0, duration: 0.3 }, shrinkAt + 0.6);
 
-        // manifesto: il testo si "cuce" riga per riga
-        let at = shrinkAt + 1.1;
-        q("[data-riga]").forEach((riga) => {
-          const words = riga.querySelectorAll("[data-word]");
-          const dash = riga.querySelector("[data-dash]");
-          tl.to(dash, { scaleX: 1, duration: 0.9, ease: "none" }, at).to(words, { yPercent: 0, duration: 0.25, stagger: 0.2, ease: "power2.out" }, at + 0.05);
-          at += 1.05;
-        });
-        tl.to({}, { duration: 0.6 });
+            // manifesto: il testo si "cuce" riga per riga
+            let at = shrinkAt + 1.1;
+            q("[data-riga]").forEach((riga) => {
+              const words = riga.querySelectorAll("[data-word]");
+              const dash = riga.querySelector("[data-dash]");
+              tl.to(dash, { scaleX: 1, duration: 0.9, ease: "none" }, at).to(
+                words,
+                { yPercent: 0, duration: 0.25, stagger: 0.2, ease: "power2.out" },
+                at + 0.05,
+              );
+              at += 1.05;
+            });
+            tl.to({}, { duration: 0.6 });
 
-        return () => setTone("lookbook", false);
-      });
+            return () => setTone("lookbook", false);
+          });
 
-      mm.add(MQ.reduced, () => {
-        gsap.set(q("[data-look]"), { clipPath: "none" });
-      });
+          mm.add(MQ.reduced, () => {
+            gsap.set(q("[data-look]"), { clipPath: "none" });
+          });
         }),
       ),
     { scope: root, dependencies: [vk], revertOnUpdate: true },
@@ -125,7 +153,10 @@ export default function LookbookManifesto() {
     <div ref={root} id="lookbook" className="relative">
       <div data-stage className="relative h-svh overflow-hidden motion-reduce:h-auto">
         {/* ---- Cap. 7 Manifesto (sotto) ---- */}
-        <section aria-labelledby="manifesto-title" className="absolute inset-0 flex flex-col justify-center bg-cemento px-5 md:px-10 motion-reduce:relative motion-reduce:py-24">
+        <section
+          aria-labelledby="manifesto-title"
+          className="absolute inset-0 flex flex-col justify-center bg-cemento px-5 md:px-10 motion-reduce:relative motion-reduce:py-24"
+        >
           <header data-manifesto-head className="absolute left-5 top-20 md:left-10 md:top-28">
             <p className="tag text-filo-ink">Cap. 07</p>
             <h2 id="manifesto-title" className="mt-2 font-display text-4xl uppercase leading-none md:text-6xl">
@@ -159,7 +190,10 @@ export default function LookbookManifesto() {
         </section>
 
         {/* ---- Cap. 6 Lookbook (sopra) ---- */}
-        <section aria-labelledby="lookbook-title" className="absolute inset-0 motion-reduce:relative motion-reduce:grid motion-reduce:gap-2">
+        <section
+          aria-labelledby="lookbook-title"
+          className="absolute inset-0 motion-reduce:relative motion-reduce:grid motion-reduce:gap-2"
+        >
           <h2 id="lookbook-title" className="sr-only">
             Lookbook
           </h2>
@@ -178,11 +212,18 @@ export default function LookbookManifesto() {
               </figcaption>
             </figure>
           ))}
-          <div data-kin-wrap aria-hidden="true" className="pointer-events-none absolute inset-0 z-[3] flex flex-col justify-center gap-[2vh] overflow-hidden mix-blend-difference text-carta motion-reduce:hidden">
+          <div
+            data-kin-wrap
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-[3] flex flex-col justify-center gap-[2vh] overflow-hidden mix-blend-difference text-carta motion-reduce:hidden"
+          >
             <p data-kin className="whitespace-nowrap font-display text-[24vw] uppercase leading-[0.85] md:text-[17vw]">
               Cemento · Luce dura · Cemento ·
             </p>
-            <p data-kin className="whitespace-nowrap font-display text-[24vw] uppercase leading-[0.85] text-transparent [-webkit-text-stroke:1.5px_var(--carta)] md:text-[17vw]">
+            <p
+              data-kin
+              className="whitespace-nowrap font-display text-[24vw] uppercase leading-[0.85] text-transparent [-webkit-text-stroke:1.5px_var(--carta)] md:text-[17vw]"
+            >
               Ordito · Strati · Ordito · Strati ·
             </p>
             <p data-kin className="tag whitespace-nowrap text-[3.4vw] md:text-[1.4vw]">

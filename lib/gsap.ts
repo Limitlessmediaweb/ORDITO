@@ -40,7 +40,6 @@ export const MQ = {
   fine: "(pointer: fine) and (prefers-reduced-motion: no-preference)",
 } as const;
 
-export const prefersReduced = () =>
-  typeof window !== "undefined" && window.matchMedia(MQ.reduced).matches;
+export const prefersReduced = () => typeof window !== "undefined" && window.matchMedia(MQ.reduced).matches;
 
 export { gsap, ScrollTrigger, SplitText, Flip, Observer, useGSAP };

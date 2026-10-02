@@ -33,7 +33,11 @@ export default function Cucito({ righe, className }: { righe: string[]; classNam
           <span data-txt className="block">
             {r}
           </span>
-          <span data-dash aria-hidden="true" className="absolute bottom-0 left-0 h-0 w-full origin-left border-t-[3px] border-dashed border-filo" />
+          <span
+            data-dash
+            aria-hidden="true"
+            className="absolute bottom-0 left-0 h-0 w-full origin-left border-t-[3px] border-dashed border-filo"
+          />
         </p>
       ))}
     </div>

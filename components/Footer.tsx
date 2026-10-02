@@ -120,7 +120,10 @@ export default function Footer() {
           // il filo pende un po' (gravità) e si piega col movimento
           const mx = t.ax + dx / 2 - t.vy * 2;
           const my = t.ay + dy / 2 + len * 0.18 + t.vx * 2;
-          t.el.setAttribute("d", `M${t.ax.toFixed(1)} ${t.ay.toFixed(1)}Q${mx.toFixed(1)} ${my.toFixed(1)} ${t.x.toFixed(1)} ${t.y.toFixed(1)}`);
+          t.el.setAttribute(
+            "d",
+            `M${t.ax.toFixed(1)} ${t.ay.toFixed(1)}Q${mx.toFixed(1)} ${my.toFixed(1)} ${t.x.toFixed(1)} ${t.y.toFixed(1)}`,
+          );
         }
       };
 
@@ -163,11 +166,14 @@ export default function Footer() {
   ];
 
   return (
-    <footer ref={root} data-tone="dark" data-velo="off" className="relative z-[2] overflow-hidden bg-grafite px-4 pb-20 pt-24 text-carta md:px-10 md:pt-32">
+    <footer
+      ref={root}
+      data-tone="dark"
+      data-velo="off"
+      className="relative z-[2] overflow-hidden bg-grafite px-4 pb-20 pt-24 text-carta md:px-10 md:pt-32"
+    >
       <div className="flex flex-col justify-between gap-10 md:flex-row">
-        <p className="max-w-sm font-display text-3xl uppercase leading-none md:text-5xl">
-          Ogni capo inizia da un filo.
-        </p>
+        <p className="max-w-sm font-display text-3xl uppercase leading-none md:text-5xl">Ogni capo inizia da un filo.</p>
         <nav aria-label="Footer">
           <ul className="grid grid-cols-2 gap-x-10 gap-y-1">
             {nav.map((n) => (

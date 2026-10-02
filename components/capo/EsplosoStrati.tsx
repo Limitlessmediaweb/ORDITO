@@ -39,10 +39,18 @@ export default function EsplosoStrati({ strati, nome }: { strati: { label: strin
 
   return (
     <section ref={root} aria-label={`Esploso di ${nome}`} className="relative">
-      <div data-stage className="flex h-svh items-center justify-center overflow-hidden [perspective:1400px] motion-reduce:h-auto motion-reduce:py-20">
+      <div
+        data-stage
+        className="flex h-svh items-center justify-center overflow-hidden [perspective:1400px] motion-reduce:h-auto motion-reduce:py-20"
+      >
         <div data-scene className="relative aspect-[3/4] h-[58svh] [transform-style:preserve-3d] motion-reduce:h-auto motion-reduce:w-64">
           {strati.map((s, i) => (
-            <figure key={s.label} data-strato className="absolute inset-0 shadow-[0_30px_60px_rgb(20_20_20/0.18)]" style={{ zIndex: strati.length - i }}>
+            <figure
+              key={s.label}
+              data-strato
+              className="absolute inset-0 shadow-[0_30px_60px_rgb(20_20_20/0.18)]"
+              style={{ zIndex: strati.length - i }}
+            >
               <Image src={s.img} alt={`${nome}: ${s.label.toLowerCase()}`} fill sizes="40vh" className="object-cover" />
               <figcaption data-strato-label className="tag absolute -top-7 left-0 whitespace-nowrap">
                 <span className="text-filo-ink">0{i + 1}</span> {s.label}

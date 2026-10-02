@@ -95,9 +95,7 @@ export default function CapoCard({ capo, eager = false }: { capo: Capo; eager?: 
   }
 
   const cap = capo.colorway[cw];
-  const title = (
-    <span className="font-display text-3xl uppercase leading-none md:text-4xl">{capo.nome}</span>
-  );
+  const title = <span className="font-display text-3xl uppercase leading-none md:text-4xl">{capo.nome}</span>;
 
   return (
     <article ref={root} className="group relative flex w-full flex-col [perspective:1000px]" data-cursor>
@@ -110,14 +108,16 @@ export default function CapoCard({ capo, eager = false }: { capo: Capo; eager?: 
               className="absolute inset-0"
               style={{ zIndex: i === 0 ? 2 : 1, visibility: i === 0 ? "visible" : "hidden" }}
             >
-              {(show && (i === 0 || near)) && <Image
-                src={c.img}
-                alt={`${capo.nome}, colore ${c.nome.toLowerCase()}, vista frontale`}
-                fill
-                sizes="(max-width: 768px) 78vw, 30vw"
-                loading={eager ? "eager" : "lazy"}
-                className="object-cover"
-              />}
+              {show && (i === 0 || near) && (
+                <Image
+                  src={c.img}
+                  alt={`${capo.nome}, colore ${c.nome.toLowerCase()}, vista frontale`}
+                  fill
+                  sizes="(max-width: 768px) 78vw, 30vw"
+                  loading={eager ? "eager" : "lazy"}
+                  className="object-cover"
+                />
+              )}
             </div>
           ))}
 
@@ -140,7 +140,10 @@ export default function CapoCard({ capo, eager = false }: { capo: Capo; eager?: 
       <div className="mt-4 flex items-start justify-between gap-4">
         <div>
           {capo.pagina ? (
-            <TendaLink href={`/capo/${capo.slug}`} className="after:absolute after:inset-0 after:z-[6] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-filo">
+            <TendaLink
+              href={`/capo/${capo.slug}`}
+              className="after:absolute after:inset-0 after:z-[6] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-filo"
+            >
               {title}
             </TendaLink>
           ) : (
@@ -150,7 +153,7 @@ export default function CapoCard({ capo, eager = false }: { capo: Capo; eager?: 
             {capo.materiale} · {capo.grammatura}
           </p>
         </div>
-        <p className="font-mono text-sm">
+        <p className="whitespace-nowrap font-mono text-sm">
           {euro(capo.prezzo)}
           <span className="sr-only"> (prezzo dimostrativo)</span>
         </p>
@@ -180,7 +183,7 @@ export default function CapoCard({ capo, eager = false }: { capo: Capo; eager?: 
           type="button"
           onClick={() => toggleBack(!back)}
           aria-pressed={back}
-          className="tag ml-auto min-h-11 border-b border-current md:hidden"
+          className="tag ml-auto min-h-11 border-b border-current md:opacity-0 md:focus-visible:opacity-100"
         >
           {back ? "Fronte" : "Retro"}
         </button>

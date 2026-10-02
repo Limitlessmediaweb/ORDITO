@@ -24,12 +24,12 @@ export default function Fondo() {
         // data-velo="off": la zona ha già un fondo pieno, cambia solo il tono di header e cursore
         if (el.dataset.velo !== "off")
           gsap
-          .timeline({
-            scrollTrigger: { trigger: el, start: "top 85%", end: "bottom 15%", scrub: true },
-          })
-          .fromTo(velo.current, { opacity: 0 }, { opacity: 1, duration: 0.18, ease: "none", immediateRender: false })
-          .to(velo.current, { opacity: 1, duration: 0.64, ease: "none" })
-          .to(velo.current, { opacity: 0, duration: 0.18, ease: "none" });
+            .timeline({
+              scrollTrigger: { trigger: el, start: "top 85%", end: "bottom 15%", scrub: true },
+            })
+            .fromTo(velo.current, { opacity: 0 }, { opacity: 1, duration: 0.18, ease: "none", immediateRender: false })
+            .to(velo.current, { opacity: 1, duration: 0.64, ease: "none" })
+            .to(velo.current, { opacity: 0, duration: 0.18, ease: "none" });
         ScrollTrigger.create({
           trigger: el,
           start: "top 6%",

@@ -42,7 +42,8 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     };
     if (prevPath.current === pathname) {
       // primo caricamento (o arrivo di Lenis): solo l'eventuale ancora, dopo il load
-      if (hash && document.readyState !== "complete") window.addEventListener("load", () => requestAnimationFrame(goToHash), { once: true });
+      if (hash && document.readyState !== "complete")
+        window.addEventListener("load", () => requestAnimationFrame(goToHash), { once: true });
       return;
     }
     prevPath.current = pathname;
