@@ -30,7 +30,7 @@ function pump() {
     const job = queue.shift();
     if (!job) {
       pumping = false;
-      if (ran) ScrollTrigger.refresh();
+      if (ran) refreshInPageOrder();
       return;
     }
     if (!job.cancelled) {
@@ -40,6 +40,21 @@ function pump() {
     later(step);
   };
   later(step);
+}
+
+/**
+ * I trigger creati prima delle sezioni differite (tono, footer…) vanno ricalcolati DOPO i pin
+ * che stanno sopra di loro nella pagina: si ordinano per posizione nel DOM, i pin prima.
+ */
+export function refreshInPageOrder() {
+  ScrollTrigger.sort((a: ScrollTrigger, b: ScrollTrigger) => {
+    const ta = a.trigger as Element | undefined;
+    const tb = b.trigger as Element | undefined;
+    if (!ta || !tb) return ta ? 1 : tb ? -1 : 0;
+    if (ta === tb || ta.contains(tb) || tb.contains(ta)) return (b.pin ? 1 : 0) - (a.pin ? 1 : 0);
+    return ta.compareDocumentPosition(tb) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+  });
+  ScrollTrigger.refresh();
 }
 
 export function deferInit(run: () => void) {

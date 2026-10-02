@@ -14,6 +14,11 @@ page.on("pageerror", (e) => errors.push(e.message));
 page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
 await page.goto(url, { waitUntil: "networkidle" });
 await page.waitForTimeout(Number(wait));
+// prima interazione: rilascia le sezioni differite, poi si torna in cima
+await page.mouse.move(w / 2, h / 2);
+await page.mouse.wheel(0, 2);
+await page.waitForTimeout(2500);
+await page.evaluate(() => window.scrollTo(0, 0));
 for (const raw of list.split(",")) {
   const y = raw.endsWith("vh") ? (parseFloat(raw) / 100) * h : Number(raw);
   await page.evaluate((y) => window.scrollTo(0, y), y);
