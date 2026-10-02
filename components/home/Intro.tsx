@@ -180,7 +180,7 @@ export default function Intro() {
         data-skip
         type="button"
         onClick={() => tlRef.current?.progress(1)}
-        className="tag absolute bottom-5 right-10 z-10 border-b border-current py-1 text-grafite md:bottom-8 md:right-14"
+        className="tag absolute bottom-5 right-[calc(var(--metro)+1rem)] z-10 border-b border-current py-1 text-grafite md:bottom-8"
       >
         Salta
       </button>

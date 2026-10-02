@@ -34,7 +34,7 @@ export default function Metro() {
     ticks.push(<line key={mm} x1="0" x2={five ? 11 : cm ? 8 : 4} y1={y} y2={y} />);
     if (cm && mm > 0)
       ticks.push(
-        <text key={`t${mm}`} x="21" y={y + 3} textAnchor="middle" className={five ? "fill-filo" : undefined}>
+        <text key={`t${mm}`} x="16" y={y + 3} textAnchor="middle" className={five ? "fill-filo" : undefined}>
           {mm / 10}
         </text>,
       );
@@ -44,7 +44,7 @@ export default function Metro() {
     <div
       ref={wrap}
       aria-hidden="true"
-      className="pointer-events-none fixed right-0 top-0 z-[55] h-svh w-[22px] overflow-hidden border-l border-grafite/20 bg-[#ece6d6]/90 md:w-[30px]"
+      className="pointer-events-none fixed right-0 top-0 z-[55] h-svh w-[var(--metro)] overflow-hidden border-l border-grafite/20 bg-[#ece6d6]/90"
     >
       <svg
         ref={tape}

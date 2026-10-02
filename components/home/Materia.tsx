@@ -82,14 +82,20 @@ export default function Materia() {
         // nomi giganti: marquee in direzioni opposte
         names.forEach((n, i) => {
           const rows = n.querySelectorAll("[data-row]");
-          tl.fromTo(rows[0], { xPercent: 0 }, { xPercent: -30, duration: 1.4 }, i - 0.7)
-            .fromTo(rows[1], { xPercent: -30 }, { xPercent: 0, duration: 1.4 }, i - 0.7);
+          const at = Math.max(0, i - 0.7);
+          tl.fromTo(rows[0], { xPercent: 0 }, { xPercent: -30, duration: 1.4 }, at).fromTo(rows[1], { xPercent: -30 }, { xPercent: 0, duration: 1.4 }, at);
           if (i > 0) tl.to(names[i - 1], { autoAlpha: 0, duration: 0.12 }, i - 0.6).to(n, { autoAlpha: 1, duration: 0.12 }, i - 0.42);
         });
         tl.to({}, { duration: 0.3 });
 
         let onMove: ((e: PointerEvent) => void) | undefined;
         let onLeave: (() => void) | undefined;
+        // touch: la "mano" si spegne quando lo scroll si ferma
+        const decay = () => {
+          s.vel *= 0.9;
+          s.strength = s.vel * 0.9;
+        };
+        if (!fine) gsap.ticker.add(decay);
         if (fine) {
           const stage = q("[data-stage]")[0] as HTMLElement;
           onMove = (e: PointerEvent) => {
@@ -103,6 +109,7 @@ export default function Materia() {
           stage.addEventListener("pointerleave", onLeave);
         }
         return () => {
+          gsap.ticker.remove(decay);
           glBus.setActive("materia", false);
           const stage = q("[data-stage]")[0] as HTMLElement;
           if (onMove) stage?.removeEventListener("pointermove", onMove);

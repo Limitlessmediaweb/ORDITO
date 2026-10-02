@@ -9,7 +9,7 @@ const NAV = [
 
 export default function Header() {
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-[60] flex items-start justify-between px-4 pt-4 text-[var(--ink)] transition-colors duration-500 md:px-8 md:pt-6">
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-[60] flex items-start justify-between pl-4 pr-[calc(var(--metro)+0.75rem)] pt-4 text-[var(--ink)] transition-colors duration-500 md:pl-8 md:pr-[calc(var(--metro)+1.5rem)] md:pt-6">
       <a
         href="#contenuto"
         className="sr-only-focusable pointer-events-auto absolute left-4 top-16 bg-grafite px-3 py-2 text-carta tag"

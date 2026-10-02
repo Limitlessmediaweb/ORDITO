@@ -21,7 +21,9 @@ export default function Fondo() {
       resetTone();
 
       zones.forEach((el, i) => {
-        gsap
+        // data-velo="off": la zona ha già un fondo pieno, cambia solo il tono di header e cursore
+        if (el.dataset.velo !== "off")
+          gsap
           .timeline({
             scrollTrigger: { trigger: el, start: "top 85%", end: "bottom 15%", scrub: true },
           })

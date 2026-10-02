@@ -26,6 +26,16 @@
   --carta: #f4f1ea;
   --gesso: #9a968e;
   color-scheme: light;
+  /* larghezza del metro da sarta fisso a destra: i contenuti non ci finiscono sotto */
+  --metro: 22px;
+}
+@media (min-width: 768px) {
+  :root {
+    --metro: 30px;
+  }
+}
+main {
+  padding-right: var(--metro);
 }
 
 html {

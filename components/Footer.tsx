@@ -163,7 +163,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer ref={root} data-tone="dark" className="relative z-[2] overflow-hidden px-4 pb-20 pt-24 text-carta md:px-10 md:pt-32">
+    <footer ref={root} data-tone="dark" data-velo="off" className="relative z-[2] overflow-hidden bg-grafite px-4 pb-20 pt-24 text-carta md:px-10 md:pt-32">
       <div className="flex flex-col justify-between gap-10 md:flex-row">
         <p className="max-w-sm font-display text-3xl uppercase leading-none md:text-5xl">
           Ogni capo inizia da un filo.

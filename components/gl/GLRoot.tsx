@@ -14,7 +14,7 @@ export default function GLRoot() {
       frameloop={active ? "always" : "never"}
       dpr={[1, 1.75]}
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
-      style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 1 }}
+      style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 1, visibility: active ? "visible" : "hidden" }}
       aria-hidden="true"
     >
       <View.Port />
